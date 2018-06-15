@@ -32,4 +32,5 @@ test_script:
   - echo test Configuration=%Configuration%
   - perl -le "print qq(test with perl v$])"
   ## make test: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
-  - if exist "Makefile" (perl -MConfig -le "system $Config{make} test") ELSE (prove -l t)
+  - if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'test'") ELSE (prove -l t)
+  - prove -l t
