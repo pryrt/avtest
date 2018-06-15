@@ -7,11 +7,10 @@ cache:
   - C:\strawberry
 
 install:
-  - if not exist "C:\strawberry" cinst strawberryperl
+  - if not exist "C:\strawberry" cinst strawberryperl -ia "/log ""c:\projects\%APPVEYOR_PROJECT_NAME%\choco-install.log"""
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
   - cd C:\projects\%APPVEYOR_PROJECT_NAME%
-  - cpanm --installdeps .
+  - type choco-install.log
 
 build_script:
-  - perl Makefile.PL
-  - gmake test
+  - perl -MConfig -le "print $Config{make}; system $Config{make}, '--version'"
