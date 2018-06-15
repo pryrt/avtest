@@ -1,11 +1,16 @@
 configuration:
   - vOLD
   - vNEW
+  
+category:
+  - oldCat
+  - newCat
 
 install:
   - echo install in %CD%
-  - set
+  - echo install using Configuration=%Configuration%
+  - echo install using Category=%Category%
 
 build_script:
-  - echo building
-  - set
+  - echo build using Configuration=%Configuration%
+  - echo build using Category=%Category%
