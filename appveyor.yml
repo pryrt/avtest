@@ -9,9 +9,16 @@ cache:
 install:
   - if not exist "C:\strawberry" cinst strawberryperl -ia "/log ""c:\projects\%APPVEYOR_PROJECT_NAME%\choco-install.log"""
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
-  - dir C:\strawberry
+  - dir C:\strawberry > "c:\projects\%APPVEYOR_PROJECT_NAME%\strawberry.log"
+  - type C:\strawberry\relocation.txt >> "c:\projects\%APPVEYOR_PROJECT_NAME%\strawberry.log"
   - cd C:\projects\%APPVEYOR_PROJECT_NAME%
-  - type choco-install.log
 
 build_script:
   - perl -MConfig -le "print $Config{make}; system $Config{make}, '--version'"
+  
+artifacts:
+  - path: c:\projects\%APPVEYOR_PROJECT_NAME%\choco-install.log
+  - path: c:\projects\%APPVEYOR_PROJECT_NAME%\strawberry.log
+  
+test_script:
+  - perl -V
