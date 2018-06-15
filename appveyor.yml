@@ -1,8 +1,9 @@
 configuration:
   - vOLD
   - vNEW
-  
-category:
+
+test: 
+  categories:
   - oldCat
   - newCat
 
