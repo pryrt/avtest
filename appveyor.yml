@@ -4,22 +4,23 @@ branches:
 skip_tags: true
 
 cache:
-  - C:\strawberry
+  - C:\strawberry -> recache
 
 install:
-  - cd C:\projects\%APPVEYOR_PROJECT_NAME%
+  #- cd C:\projects\%APPVEYOR_PROJECT_NAME%
   - echo %CD%
-  - if not exist "C:\strawberry" cinst strawberryperl -ia "/log ""c:\projects\%APPVEYOR_PROJECT_NAME%\choco-install.log"""
+  - if not exist "C:\strawberry" cinst strawberryperl -ia "/log ""c:\projects\%APPVEYOR_PROJECT_NAME%\logs\choco-install.log"""
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
-  - dir C:\strawberry > "strawberry.log"
-  - type C:\strawberry\relocation.txt >> "strawberry.log"
+  - dir C:\strawberry > logs\strawberry.dir.txt
+  - copy C:\strawberry\relocation.txt logs\strawberry.relocation.txt
+  - copy C:\strawberry\README.txt logs\strawberry.README.txt
+  - cpanm Test::More
 
 build_script:
   - perl -MConfig -le "print $Config{make}; system $Config{make}, '--version'"
   
 artifacts:
-  - path: choco-install.log
-  - path: strawberry.log
+  - path: logs
   
 test_script:
-  - perl -V
+  - perl -MTest::More=tests,1 -e "ok $Config{make}, 'make:'.$Config{make}"
