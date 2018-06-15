@@ -9,6 +9,7 @@ cache:
 install:
   #- cd C:\projects\%APPVEYOR_PROJECT_NAME%
   - echo %CD%
+  - mkdir logs
   - if not exist "C:\strawberry" cinst strawberryperl -ia "/log ""c:\projects\%APPVEYOR_PROJECT_NAME%\logs\choco-install.log"""
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
   - dir C:\strawberry > logs\strawberry.dir.txt
