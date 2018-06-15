@@ -1,17 +1,20 @@
 configuration:
-  - vOLD
-  - vNEW
+  - 5.26.2.1
+  - 5.12.3.0
 
-test: 
+test:
   categories:
   - oldCat
   - newCat
 
 install:
   - echo install in %CD%
-  - echo install using Configuration=%Configuration%
-  - echo install using Category=%Category%
+  - echo if not exist "C:\strawberry" cinst strawberryperl --version %Configuration%
 
 build_script:
   - echo build using Configuration=%Configuration%
-  - echo build using Category=%Category%
+
+test_script:
+  - echo test Configuration=%Configuration%
+  - echo test Category=%Category%
+  - set
