@@ -23,4 +23,4 @@ artifacts:
   - path: logs
   
 test_script:
-  - perl -MTest::More=tests,1 -e "ok $Config{make}, 'make:'.$Config{make}"
+  - perl -MConfig -MTest::More=tests,1 -e "ok $Config{make}, 'make:'.$Config{make}"
