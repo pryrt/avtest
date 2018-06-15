@@ -2,19 +2,19 @@ configuration:
   - 5.26.2.1
   - 5.12.3.0
 
-test:
-  categories:
-  - oldCat
-  - newCat
+cache:
+  - C:\strawberry -> appveyor.yml
 
 install:
   - echo install in %CD%
-  - echo if not exist "C:\strawberry" cinst strawberryperl --version %Configuration%
+  - if not exist "C:\strawberry" cinst strawberryperl --version %Configuration%
+  - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
+  - perl -le "print qq(installed perl v$])"
 
 build_script:
   - echo build using Configuration=%Configuration%
+  - perl -le "print qq(build with perl v$])"
 
 test_script:
   - echo test Configuration=%Configuration%
-  - echo test Category=%Category%
-  - set
+  - perl -le "print qq(test with perl v$])"
