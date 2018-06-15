@@ -1,0 +1,3 @@
+#recache will be the appveyor "cache dependency";
+#  it should use the cached c:\Strawberry\ until this one changes
+2018-Jun-15-07:20
