@@ -1,19 +1,27 @@
-configuration:
-  - 5.26.2.1
-  #- 5.24.4.1
-  #- 5.22.3.1
-  #- 5.20.3.3
-  #- 5.18.4.1
-  ##failed##- 5.16.3.1
-  #- 5.16.3.20170202
-  - 5.14.4.1
-  ##failed##- 5.12.3.0
-  ##failed##- 5.12.3.1
+#configuration:
+#  - 5.26.2.1
+#  #- 5.24.4.1
+#  #- 5.22.3.1
+#  #- 5.20.3.3
+#  #- 5.18.4.1
+#  ##failed##- 5.16.3.1
+#  #- 5.16.3.20170202
+#  - 5.14.4.1
+#  ##failed##- 5.12.3.0
+#  ##failed##- 5.12.3.1
 
 environment:
   matrix:
-    - perl: default
-    - perl: other
+    - perl: 5.26.2.1
+    #- perl: 5.24.4.1
+    #- perl: 5.22.3.1
+    #- perl: 5.20.3.3
+    #- perl: 5.18.4.1
+    ##failed##- perl: 5.16.3.1
+    #- perl: 5.16.3.20170202
+    - perl: 5.14.4.1
+    ##failed##- perl: 5.12.3.0
+    ##failed##- perl: 5.12.3.1
 
 skip_tags: true
 
@@ -21,14 +29,15 @@ cache:
   #- C:\strawberry -> appveyor.yml
 
 install:
-  - echo perl variable ...%perl%...
-  - if not exist "C:\strawberry" cinst strawberryperl --version %Configuration%
+  - IF NOT DEFINED perl set perl=default
+  - IF NOT EXIST "C:\strawberry" (IF /I %perl%==default (cinst strawberryperl) ELSE (cinst strawberryperl --version %perl%) )
+  #- if not exist "C:\strawberry" cinst strawberryperl --version %perl%
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
   - perl -le "print qq(installed perl v$])"
   - cpanm --installdeps .
 
 build_script:
-  - echo build using Configuration=%Configuration%, Perl=%perl%...
+  - echo build using Perl=%perl%...
   - perl -le "print qq(build with perl v$])"
   ## make: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
   - if exist "Makefile.PL" (perl Makefile.PL)
