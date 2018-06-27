@@ -20,6 +20,7 @@ cache:
 install:
   - IF NOT DEFINED perl set perl=default
   - IF NOT EXIST "C:\strawberry" (IF /I %perl%==default (cinst strawberryperl) ELSE (cinst strawberryperl --version %perl%) )
+  - IF EXIST "c:\ProgramData\chocolatey\logs" COPY /Y "c:\ProgramData\chocolatey\logs" "chocolatey.logs"
   #- if not exist "C:\strawberry" cinst strawberryperl --version %perl%
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
   - perl -le "print qq(installed perl v$])"
@@ -37,4 +38,8 @@ test_script:
   - perl -le "print qq(test with perl v$])"
   ## make test: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
   - if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'test'") ELSE (prove -l t)
-  - prove -l t
+  - if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'testcover'")
+
+artifacts:
+  - path: cover_db
+  - path: chocolatey.logs

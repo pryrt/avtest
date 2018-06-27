@@ -29,6 +29,7 @@ use 5.006;
             'warnings' => 0,
             'strict' => 0,
             'Test::More' => 0.86,
+            'Devel::Cover' => 0,
             'constant' => 0,
             'Config' => 0,
         },
@@ -46,4 +47,24 @@ use 5.006;
         $mm_args{SIGN} = 1 if MM->can('signature_target') && $ENV{MM_SIGN_DIST};
     }
 }
-WriteMakefile( %mm_args );
+sub MY::postamble {
+    my (undef,%h) = @_;
+    #require Data::Dumper;
+    #print STDERR Data::Dumper->Dump([\%h], [qw(mm_args{postamble})]);
+    return <<'POSTAMBLE';
+# TEST_D is used to test for the existence of a directory
+TEST_D = $(ABSPERLRUN) -MExtUtils::Command -e test_d --
+
+# addition to realclean: also delete coverage database, if testcover was run
+realclean ::
+	$(NOECHO) ( $(TEST_D) cover_db && $(RM_RF) cover_db ) || $(ECHO) realclean:: skip "rm -rf cover_db"
+	$(NOECHO) ( $(TEST_F) MYMETA.json.lock && $(RM_RF) MYMETA.json.lock ) || $(ECHO) realclean:: skip "rm -rf MYMETA.json.lock"
+
+# run a test coverage report
+testcover ::
+	$(NOECHO) cover -test -report html
+
+POSTAMBLE
+}
+
+WriteMakefile( %mm_args )
