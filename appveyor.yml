@@ -19,9 +19,10 @@ cache:
 
 install:
   - IF NOT DEFINED perl set perl=default
+  - echo install Perl v%perl%...
   - IF NOT EXIST "C:\strawberry" (IF /I %perl%==default (cinst strawberryperl) ELSE (cinst strawberryperl --version %perl%) )
+  - IF NOT EXIST "chocologs" MKDIR chocologs
   - IF EXIST "c:\ProgramData\chocolatey\logs" COPY /Y "c:\ProgramData\chocolatey\logs" "chocologs"
-  #- if not exist "C:\strawberry" cinst strawberryperl --version %perl%
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
   - perl -le "print qq(installed perl v$])"
   - cpanm --installdeps .
