@@ -13,6 +13,8 @@ use 5.006;
         'warnings'      => 0,
         'strict'        => 0,
         'Carp'          => 0,
+        'Devel::Cover'  => 0,       # for avtest, need it here, so --installdeps will grab it
+        'Test::More'    => 0.86,
     },
 );
 {
@@ -29,7 +31,6 @@ use 5.006;
             'warnings' => 0,
             'strict' => 0,
             'Test::More' => 0.86,
-            'Devel::Cover' => 0,
             'constant' => 0,
             'Config' => 0,
         },
