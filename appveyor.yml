@@ -1,18 +1,7 @@
-#configuration:
-#  - 5.26.2.1
-#  #- 5.24.4.1
-#  #- 5.22.3.1
-#  #- 5.20.3.3
-#  #- 5.18.4.1
-#  ##failed##- 5.16.3.1
-#  #- 5.16.3.20170202
-#  - 5.14.4.1
-#  ##failed##- 5.12.3.0
-#  ##failed##- 5.12.3.1
-
 environment:
   matrix:
-    - perl: 5.26.2.1
+    - perl: default
+    #- perl: 5.26.2.1
     #- perl: 5.24.4.1
     #- perl: 5.22.3.1
     #- perl: 5.20.3.3
@@ -44,7 +33,7 @@ build_script:
   - if exist "Makefile"    (perl -MConfig -le "system $Config{make}")
 
 test_script:
-  - echo test Configuration=%Configuration%
+  - echo test Perl=%perl%...
   - perl -le "print qq(test with perl v$])"
   ## make test: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
   - if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'test'") ELSE (prove -l t)
