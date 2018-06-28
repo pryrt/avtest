@@ -28,6 +28,8 @@ install:
   - cpanm --installdeps .
   # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
   # don't test when installing, because it takes time, and Devel::Cover is a proven module
+  - cpanm Devel::Cover
+  - IF EXIST "C:\Users\appveyor\.cpanm\work\build.log" COPY /Y "C:\Users\appveyor\.cpanm\work\build.log" cpanm.build.log
   - cpanm --notest Devel::Cover
 
 build_script:
@@ -47,3 +49,4 @@ test_script:
 artifacts:
   - path: cover_db
   - path: chocologs
+  - path: cpanm.build.log
