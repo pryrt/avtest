@@ -1,6 +1,6 @@
 environment:
   matrix:
-    #- perl: default
+    - perl: default
     #- perl: 5.26.2.1
     #- perl: 5.24.4.1
     #- perl: 5.22.3.1
@@ -27,7 +27,7 @@ install:
   - perl -le "print qq(installed perl v$])"
   - cpanm --installdeps .
   # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
-  # don't test when installing, because it takes time, and Devel::Cover is a proven module
+  # (normally) don't test when installing, because it takes time, and Devel::Cover is a proven module
   - cpanm Devel::Cover
   - IF EXIST "C:\Users\appveyor\.cpanm\build.log" COPY /Y "C:\Users\appveyor\.cpanm\build.log" cpanm.build.log
   - cpanm --notest Devel::Cover
