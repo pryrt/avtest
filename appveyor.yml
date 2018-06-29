@@ -6,12 +6,12 @@ environment:
     #- perl: 5.22.3.1
     #- perl: 5.20.3.3
     #- perl: 5.18.4.1
-    - perl: 5.18
     ##failed##- perl: 5.16.3.1
     #- perl: 5.16.3.20170202
     #- perl: 5.14.4.1
     ##failed##- perl: 5.12.3.0
     ##failed##- perl: 5.12.3.1
+    - perl: 5.14.4.1
 
 skip_tags: true
 
