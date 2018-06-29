@@ -6,12 +6,12 @@ environment:
     #- perl: 5.22.3.1
     #- perl: 5.20.3.3
     #- perl: 5.18.4.1
-    ##failed##- perl: 5.16.3.1
-    - perl: 5.16.3.1
+    ##failed##- perl: 5.16.3.1  # choco package points to outdated download URL
+    - perl: 5.16.3.20170202
     #- perl: 5.16.3.20170202
     #- perl: 5.14.4.1
-    ##failed##- perl: 5.12.3.0
-    ##failed##- perl: 5.12.3.1
+    ##failed##- perl: 5.12.3.0  # choco package points to outdated download URL
+    ##failed##- perl: 5.12.3.1  # choco package points to outdated download URL
 
 skip_tags: true
 
