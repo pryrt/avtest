@@ -11,7 +11,7 @@ environment:
     #- perl: 5.14.4.1
     ##failed##- perl: 5.12.3.0
     ##failed##- perl: 5.12.3.1
-    - perl: 5.14.4.1
+    - perl: 5.12.3.1
 
 skip_tags: true
 
