@@ -14,7 +14,7 @@ perl:
 
 os:
     - linux
-    - osx
+    #- osx
 
 notifications:
     on_success: change
