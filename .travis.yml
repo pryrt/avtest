@@ -1,10 +1,10 @@
 language: perl
 perl:
-    - "5.28"
+    #- "5.28"
     #- "5.26"
     #- "5.24"
     #- "5.22"
-    #- "5.20"
+    - "5.20"
     #- "5.18"
     #- "5.16"
     #- "5.14"
@@ -14,7 +14,7 @@ perl:
 
 os:
     - linux
-    #- osx
+    - osx
 
 notifications:
     on_success: change
@@ -44,8 +44,8 @@ after_success:
   - cover -report coveralls
   - coverage-report
 
-matrix:
-  include:
-    - perl: "5.26"
-      os: linux
-      env: COVERAGE=1       # only report coverage to coveralls for this version of perl
+#matrix:
+#  include:
+#    - perl: "5.26"
+#      os: linux
+#      env: COVERAGE=1       # only report coverage to coveralls for this version of perl
