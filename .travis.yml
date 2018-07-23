@@ -27,6 +27,7 @@ before_install:
   - perl -V
   - build-dist
   - cd $BUILD_DIR             # $BUILD_DIR is set by the build-dist command
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then perlbrew available; fi
 
 install:
   - cpan-install Devel::Cover
