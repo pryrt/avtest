@@ -14,20 +14,20 @@ perl:
 
 os:
     - linux
-    - osx
+    #- osx
 
 notifications:
     on_success: change
     on_failure: change
 
 before_install:
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then perlbrew available; fi
   - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
   - source ~/travis-perl-helpers/init
   - build-perl
   - perl -V
   - build-dist
   - cd $BUILD_DIR             # $BUILD_DIR is set by the build-dist command
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then perlbrew available; fi
 
 install:
   - cpan-install Devel::Cover
