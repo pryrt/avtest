@@ -19,6 +19,7 @@ cache:
   #- C:\strawberry -> appveyor.yml
 
 install:
+  - cinst notepadplusplus
   - IF NOT DEFINED perl set perl=default
   - echo install Perl v%perl%...
   - IF NOT EXIST "C:\strawberry" (IF /I %perl%==default (cinst strawberryperl) ELSE (cinst strawberryperl --version %perl%) )
