@@ -13,7 +13,7 @@ note "\t", "pad => '$pad'\n";
 SetForegroundWindow($pad);
 
 my $t = GetWindowText($pad);
-ok $t, 'notepad++ title';
+like $t, qr/\QNotepad++\E/, 'notepad++ title';
 diag "\t", "t => '$t'\n";
 
 # close it
