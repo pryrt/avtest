@@ -1,7 +1,7 @@
 #!/usr/bin/env perl
 use warnings;
 use strict;
-use Win32::GuiTest qw(WaitWindowLike GetWindowText SendKeys);
+use Win32::GuiTest qw(WaitWindowLike GetWindowText SetForegroundWindow SendKeys);
 use Test::More;
 
 system 1, 'notepad.exe';
