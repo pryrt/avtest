@@ -8,12 +8,13 @@ use 5.006;
     'VERSION'       => '0.00',
     'ABSTRACT'      => 'Dummy module for testing appveyor.yml',
     'PREREQ_PM'     => {
-        'Exporter'      => 5.57,    # needed for `use Exporter qw(import);` notation
-        'version'       => 0.77,
-        'warnings'      => 0,
-        'strict'        => 0,
-        'Carp'          => 0,
-        'Test::More'    => 0.86,
+        'Exporter'          => 5.57,    # needed for `use Exporter qw(import);` notation
+        'version'           => 0.77,
+        'warnings'          => 0,
+        'strict'            => 0,
+        'Carp'              => 0,
+        'Test::More'        => 0.86,
+        'Win32::GuiTest'    => 1.64,
     },
 );
 {
