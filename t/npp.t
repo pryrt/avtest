@@ -14,7 +14,7 @@ SetForegroundWindow($pad);
 
 my $t = GetWindowText($pad);
 ok $t, 'notepad++ title';
-note "\t", "t => '$t'\n";
+diag "\t", "t => '$t'\n";
 
 # close it
 SendKeys( '%F', 100 );
