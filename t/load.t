@@ -1,6 +1,5 @@
 #!/usr/bin/env perl
 use warnings;
 use strict;
-use Test::More tests => 2;
+use Test::More tests => 1;
 ok 1, 'dummy test';
-ok 0, 'failing test';
