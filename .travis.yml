@@ -39,6 +39,8 @@ before_script:
   - coverage-setup
 
 script:
+  - setenv
+  - set
   - prove -lrv $(test-dirs)
 
 after_success:

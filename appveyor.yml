@@ -45,11 +45,12 @@ build_script:
 test_script:
   - echo test Perl=%perl%...
   - perl -le "print qq(test with perl v$])"
-  - if exist "Makefile"    (perl -MConfig -le "print qq($Config{make} test)">mytest.bat) ELSE (echo prove -l t > mytest.bat)
-  - cat mytest.bat
+  - set
   ## make test: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
   #- if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'test'") ELSE (prove -l t)
   #- if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'testcover'")
+  - if exist "Makefile"    (perl -MConfig -le "print qq($Config{make} test)">mytest.bat) ELSE (echo prove -l t > mytest.bat)
+  - cat mytest.bat
   - mytest.bat
 
 artifacts:
