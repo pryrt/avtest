@@ -1,8 +1,14 @@
 #!/usr/bin/env perl
 use warnings;
 use strict;
-use Win32::GuiTest qw(WaitWindowLike GetWindowText SetForegroundWindow SendKeys);
 use Test::More;
+
+BEGIN {
+    # do this _before_ use Win32::GuiTest
+    if($^O !~ /MSWin32|cygwin/ and !$ENV{W32MNPP_FORCE_NONWIN_TEST} ) { plan skip_all => sprintf qq|Not testing with notepad.exe in OS '%s'\n|, $^O; }
+}
+
+use Win32::GuiTest qw(WaitWindowLike GetWindowText SetForegroundWindow SendKeys);
 
 system 1, 'notepad.exe';
 
