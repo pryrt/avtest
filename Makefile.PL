@@ -68,4 +68,10 @@ testcover ::
 POSTAMBLE
 }
 
+if($^O !~ /MSWin32|cygwin/) {
+    warn "#"x40, "\n";
+    warn sprintf "# please help me with OS '%s'\n", $^O;
+    warn "#"x40, "\n";
+}
+
 WriteMakefile( %mm_args )
