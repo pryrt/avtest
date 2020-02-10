@@ -31,7 +31,7 @@ install:
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
   - perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
-  - perl -e "if($]<5.014){ system('cpanm', $_)) for qw(Config::Perl::V Encode::compat Math::Int64 Win32::API)) }"
+  - perl -e "if($]<5.014){ system('cpanm', $_) for qw(Config::Perl::V Encode::compat Math::Int64 Win32::API) }"
   - cpanm --installdeps .
   # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
   # (normally) don't test when installing, because it takes time, and Devel::Cover is a proven module
@@ -43,7 +43,6 @@ build_script:
   - echo build using Perl=%perl%...
   - perl -le "print qq(build with perl v$])"
   ## make: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
-  - perl -e "if($]<5.014){ system(qw(cpanm Config::Perl::V Encode::compat Math::Int64 Win32::API)) }"
   - if exist "Makefile.PL" (perl Makefile.PL)
   - if exist "Makefile"    (perl -MConfig -le "system $Config{make}")
 
