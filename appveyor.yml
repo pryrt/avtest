@@ -1,6 +1,6 @@
 environment:
   matrix:
-    - perl: default
+    #- perl: default
     #- perl: 5.26.2.1
     #- perl: 5.24.4.1
     #- perl: 5.22.3.1
@@ -11,8 +11,8 @@ environment:
     #- perl: 5.14.4.1
     ##failed##- perl: 5.12.3.0  # choco package points to outdated download URL
     ##failed##- perl: 5.12.3.1  # choco package points to outdated download URL
-    #- perl: 5.12.3.20180709 # predates cpanm
-    #- perl: 5.10.1.5 # predates cpanm
+    - perl: 5.12.3.20180709 # predates cpanm
+    - perl: 5.10.1.5 # predates cpanm
 
 skip_tags: true
 
@@ -28,6 +28,10 @@ install:
   - IF EXIST "c:\ProgramData\chocolatey\logs" COPY /Y "c:\ProgramData\chocolatey\logs" "chocologs"
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
   - perl -le "print qq(installed perl v$])"
+  - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
+  - cpanm App::cpanminus
+  - perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' )) }"
+  - perl -e "if($]<5.014){ system('cpanm', $_)) for qw(Config::Perl::V Encode::compat Math::Int64 Win32::API)) }"
   - cpanm --installdeps .
   # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
   # (normally) don't test when installing, because it takes time, and Devel::Cover is a proven module
@@ -39,6 +43,7 @@ build_script:
   - echo build using Perl=%perl%...
   - perl -le "print qq(build with perl v$])"
   ## make: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
+  - perl -e "if($]<5.014){ system(qw(cpanm Config::Perl::V Encode::compat Math::Int64 Win32::API)) }"
   - if exist "Makefile.PL" (perl Makefile.PL)
   - if exist "Makefile"    (perl -MConfig -le "system $Config{make}")
 
