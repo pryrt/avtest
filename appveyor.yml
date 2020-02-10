@@ -30,7 +30,7 @@ install:
   - perl -le "print qq(installed perl v$])"
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
-  - perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' )) }"
+  - perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
   - perl -e "if($]<5.014){ system('cpanm', $_)) for qw(Config::Perl::V Encode::compat Math::Int64 Win32::API)) }"
   - cpanm --installdeps .
   # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
