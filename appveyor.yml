@@ -11,7 +11,7 @@ environment:
     #- perl: 5.14.4.1
     ##failed##- perl: 5.12.3.0  # choco package points to outdated download URL
     ##failed##- perl: 5.12.3.1  # choco package points to outdated download URL
-    - perl: 5.12.3.20180709 # predates cpanm
+    #- perl: 5.12.3.20180709 # predates cpanm
     - perl: 5.10.1.5 # predates cpanm
 
 skip_tags: true
@@ -31,8 +31,17 @@ install:
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
   - perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
-  - perl -e "if($]<5.014){ system('cpanm', $_) for qw(Config::Perl::V Encode::compat Math::Int64 Win32::API) }"
+  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
+  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
+  - perl -e "if($]<5.014){ system('cpanm', '--notest', $_) for qw(Encode::compat) }"
+  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
+  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
+  - perl -e "if($]<5.014){ system('cpanm', $_) for qw(Config::Perl::V Math::Int64 Win32::API) }"
+  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
+  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
   - cpanm --installdeps .
+  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
+  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
   # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
   # (normally) don't test when installing, because it takes time, and Devel::Cover is a proven module
   #- cpanm --force Devel::Cover
