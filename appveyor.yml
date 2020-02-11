@@ -30,8 +30,6 @@ install:
   - perl -le "print qq(installed perl v$])"
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
-  - cpanm ExtUtils::MakeMaker@6.98
-  - dir /S c:\users\appveyor\.cpanm\work
   #- perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
   #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
   #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
@@ -54,8 +52,15 @@ build_script:
   - echo build using Perl=%perl%...
   - perl -le "print qq(build with perl v$])"
   ## make: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
-  - if exist "Makefile.PL" (perl Makefile.PL)
-  - if exist "Makefile"    (perl -MConfig -le "system $Config{make}")
+  #- if exist "Makefile.PL" (perl Makefile.PL)
+  #- if exist "Makefile"    (perl -MConfig -le "system $Config{make}")
+  - echo about to install EUMM
+  - cpanm ExtUtils::MakeMaker@6.98
+  - echo does this next line get run even if cpanm fails
+
+after_build:
+  - echo does after_build get run even if cpanm fails
+  - dir /S c:\users\appveyor\.cpanm\work
 
 test_script:
   - echo test Perl=%perl%...
@@ -75,3 +80,4 @@ artifacts:
   - path: chocologs
   #- path: cpanm.build.log
   - path: C:\Users\appveyor\.cpanm\work\**\*.log
+  - path: C:\Users\appveyor\.cpanm\work
