@@ -55,12 +55,8 @@ build_script:
   #- if exist "Makefile.PL" (perl Makefile.PL)
   #- if exist "Makefile"    (perl -MConfig -le "system $Config{make}")
   - echo about to install EUMM, try to unconditionally also do the directory listing
-  - cpanm ExtUtils::MakeMaker@6.98 & dir /S c:\users\appveyor\.cpanm\work
+  - cpanm ExtUtils::MakeMaker@6.98 & dir c:\users\appveyor\.cpanm\work\*\
   - echo does this next line get run even if cpanm fails
-
-after_build:
-  - echo does after_build get run even if cpanm fails
-  - dir /S c:\users\appveyor\.cpanm\work
 
 test_script:
   - echo test Perl=%perl%...
@@ -79,5 +75,4 @@ artifacts:
   #- path: cover_db
   - path: chocologs
   #- path: cpanm.build.log
-  - path: C:\Users\appveyor\.cpanm\work\**\*.log
-  - path: C:\Users\appveyor\.cpanm\work
+  - path: ..\..\Users\appveyor\.cpanm\work\**\*.log
