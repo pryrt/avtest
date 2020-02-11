@@ -69,4 +69,5 @@ test_script:
 artifacts:
   #- path: cover_db
   - path: chocologs
-  - path: cpanm.build.log
+  #- path: cpanm.build.log
+  - path: C:\Users\appveyor\.cpanm\work\**\*.log
