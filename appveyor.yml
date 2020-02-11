@@ -30,18 +30,18 @@ install:
   - perl -le "print qq(installed perl v$])"
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
-  - perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
-  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  - perl -e "if($]<5.014){ system('cpanm', '--notest', $_) for qw(Encode::compat) }"
-  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  - perl -e "if($]<5.014){ system('cpanm', $_) for qw(Config::Perl::V Math::Int64 Win32::API) }"
-  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
+  #- perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
+  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
+  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
+  #- perl -e "if($]<5.014){ system('cpanm', '--notest', $_) for qw(Encode::compat) }"
+  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
+  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
+  #- perl -e "if($]<5.014){ system('cpanm', $_) for qw(Config::Perl::V Math::Int64 Win32::API) }"
+  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
+  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
   - cpanm --installdeps .
-  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  - IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
+  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
+  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
   # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
   # (normally) don't test when installing, because it takes time, and Devel::Cover is a proven module
   #- cpanm --force Devel::Cover
@@ -58,13 +58,16 @@ build_script:
 test_script:
   - echo test Perl=%perl%...
   - perl -le "print qq(test with perl v$])"
+  - perl -V
   - set
   ## make test: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
   #- if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'test'") ELSE (prove -l t)
   #- if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'testcover'")
-  - if exist "Makefile"    (perl -MConfig -le "print qq($Config{make} test)">mytest.bat) ELSE (echo prove -l t > mytest.bat)
-  - cat mytest.bat
-  - mytest.bat
+  #- if exist "Makefile"    (perl -MConfig -le "print qq($Config{make} test)">mytest.bat) ELSE (echo prove -l t > mytest.bat)
+  #- cat mytest.bat
+  #- mytest.bat
+  - cpanm ExtUtils::MakeMaker@6.98
+  - dir /S c:\users\appveyor\.cpanm\work
 
 artifacts:
   #- path: cover_db
