@@ -30,6 +30,7 @@ install:
   - perl -le "print qq(installed perl v$])"
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
+  - cpanm ExtUtils::MakeMaker@6.98
   #- perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
   #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
   #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
@@ -39,7 +40,7 @@ install:
   #- perl -e "if($]<5.014){ system('cpanm', $_) for qw(Config::Perl::V Math::Int64 Win32::API) }"
   #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
   #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  - cpanm --installdeps .
+  #- cpanm --installdeps .
   #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
   #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
   # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
@@ -66,7 +67,6 @@ test_script:
   #- if exist "Makefile"    (perl -MConfig -le "print qq($Config{make} test)">mytest.bat) ELSE (echo prove -l t > mytest.bat)
   #- cat mytest.bat
   #- mytest.bat
-  - cpanm ExtUtils::MakeMaker@6.98
   - dir /S c:\users\appveyor\.cpanm\work
 
 artifacts:
