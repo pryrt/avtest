@@ -2,6 +2,9 @@ environment:
   matrix:
     - perl: default
     - perl: default
+      AUTOMATED_TESTING: 1
+    - perl: default
+      AUTOMATED_TESTING: 0
       myBits: --FORCEx86
     #- perl: 5.26.2.1
     #- perl: 5.24.4.1
