@@ -1,5 +1,6 @@
 language: perl
 perl:
+    #- "5.30"
     - "5.28"
     #- "5.26"
     #- "5.24"
@@ -10,18 +11,21 @@ perl:
     #- "5.14"
     #- "5.12"
     #- "5.10"
-    #- "5.8"
+
+#matrix:
+#  include:
+#    - perl: "5.26"
+#      os: linux
+#      env: COVERAGE=1       # only report coverage to coveralls for this version of perl
 
 os:
     - linux
-    #- osx
 
 notifications:
     on_success: change
     on_failure: change
 
 before_install:
-  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then perlbrew available; fi
   - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
   - source ~/travis-perl-helpers/init
   - build-perl
@@ -30,8 +34,6 @@ before_install:
   - cd $BUILD_DIR             # $BUILD_DIR is set by the build-dist command
 
 install:
-  - cpan-install Devel::Cover
-  - cpan-install Devel::Cover::Report::Coveralls
   - cpan-install --deps       # installs prereqs, including recommends
   - cpan-install --coverage   # installs converage prereqs, if enabled
 
@@ -39,16 +41,8 @@ before_script:
   - coverage-setup
 
 script:
-  - setenv
-  - set
   - prove -lrv $(test-dirs)
 
 after_success:
   - cover -report coveralls
   - coverage-report
-
-#matrix:
-#  include:
-#    - perl: "5.26"
-#      os: linux
-#      env: COVERAGE=1       # only report coverage to coveralls for this version of perl

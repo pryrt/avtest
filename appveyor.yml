@@ -1,6 +1,8 @@
 environment:
   matrix:
-    #- perl: default
+    - perl: default
+    - perl: default
+      myBits: --FORCEx86
     #- perl: 5.26.2.1
     #- perl: 5.24.4.1
     #- perl: 5.22.3.1
@@ -12,7 +14,7 @@ environment:
     ##failed##- perl: 5.12.3.0  # choco package points to outdated download URL
     ##failed##- perl: 5.12.3.1  # choco package points to outdated download URL
     #- perl: 5.12.3.20180709 # predates cpanm
-    - perl: 5.10.1.5 # predates cpanm
+    #- perl: 5.10.1.5 # predates cpanm
 
 skip_tags: true
 
@@ -20,10 +22,12 @@ cache:
   #- C:\strawberry -> appveyor.yml
 
 install:
-  - cinst notepadplusplus
+  - IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
+  - echo myBits=_%myBits%_
+  - cinst %myBits% notepadplusplus
   - IF NOT DEFINED perl set perl=default
   - echo install Perl v%perl%...
-  - IF NOT EXIST "C:\strawberry" (IF /I %perl%==default (cinst strawberryperl) ELSE (cinst strawberryperl --version %perl%) )
+  - IF /I %perl%==default (cinst %myBits% strawberryperl) ELSE (cinst %myBits% strawberryperl --version %perl%)
   - IF NOT EXIST "chocologs" MKDIR chocologs
   - IF EXIST "c:\ProgramData\chocolatey\logs" COPY /Y "c:\ProgramData\chocolatey\logs" "chocologs"
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
@@ -51,30 +55,20 @@ install:
 build_script:
   - echo build using Perl=%perl%...
   - perl -le "print qq(build with perl v$])"
-  ## make: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
-  #- if exist "Makefile.PL" (perl Makefile.PL)
-  #- if exist "Makefile"    (perl -MConfig -le "system $Config{make}")
-  - echo about to install EUMM, try to unconditionally also do the directory listing
-  - perl -MExtUtils::MakeMaker -le "print $ExtUtils::MakeMaker::VERSION"
-  - cpanm --notest ExtUtils::MakeMaker@6.98 & dir /S c:\users\appveyor\.cpanm\work\ & MOVE /Y c:\users\appveyor\.cpanm\work .
-  - perl -MExtUtils::MakeMaker -le "print $ExtUtils::MakeMaker::VERSION"
-  - echo does this next line get run even if cpanm fails
+  - perl Makefile.PL
+  - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
+  - echo MyMake = %mymake%
+
+after_build:
+  - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
 
 test_script:
   - echo test Perl=%perl%...
   - perl -le "print qq(test with perl v$])"
-  - perl -V
-  - set
-  ## make test: but don't want to have to know whether strawberry is using dmake, gmake, or futuremake
-  #- if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'test'") ELSE (prove -l t)
-  #- if exist "Makefile" (perl -MConfig -le "system $Config{make}, 'testcover'")
-  #- if exist "Makefile"    (perl -MConfig -le "print qq($Config{make} test)">mytest.bat) ELSE (echo prove -l t > mytest.bat)
-  #- cat mytest.bat
-  #- mytest.bat
-  #- dir /S c:\users\appveyor\.cpanm\work
+  - perl -V:ptrsize -V:ivsize -V:myuname
+  # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
+  - cmd/c %mymake% test
 
 artifacts:
-  #- path: cover_db
   - path: chocologs
-  #- path: cpanm.build.log
   - path: work\**\*.log
