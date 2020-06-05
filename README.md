@@ -28,3 +28,13 @@ In Makefile.PL, pseudocode:
 
 I think that’s a reasonable algorithm, though testing/implementing it will be … interesting.
 
+### Notes
+
+* I had been leaning toward unzipping in the Makefile.PL directory... but when studying the
+    travis details (reminding myself of why the linux one wasn't showing bitness, etc --
+    because it skips that part!!!), I saw that they did a `make distdir`...
+    Even without linux, if the smoke testers are building and testing from a "distdir" equivalent,
+    it might not create it in the right spot.
+* but I still need a way to create a _known_ name that my test files can refer to for determining
+    whether to add the downloaded npp path or not.  Hmph.
+    Maybe '<tmpdir>/avtest.inc'.

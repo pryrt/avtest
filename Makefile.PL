@@ -75,6 +75,10 @@ if($ENV{W32MNPP_FORCE_WRONG_OS}) {
     $^O = 'WrongOS';
 }
 
+print STDERR "TopLevel AUTOMATED_TESTING = ", $ENV{AUTOMATED_TESTING}//'<undef>', "\n";
+print STDERR "TopLevel TEMP = ", $ENV{TEMP}//'<undef>', "\n";
+print STDERR "TopLevel TMP = ", $ENV{TMP}//'<undef>', "\n";
+
 if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
     # 1. Check automated testing (cpan testers smoke tester machine)
     print STDERR "AUTOMATED_TESTING = ", $ENV{AUTOMATED_TESTING}//'<undef>', "\n";
@@ -116,15 +120,13 @@ if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
 
     # 4. writeable directory
     #   I was originally going to go for a temp directory... but it would make more sense if I could use the project directory
-    use File::Spec::Functions qw/rel2abs splitpath/;
-    my $cwd = join '', (splitpath(rel2abs($0)))[0..1];
-    printf STDERR "current directory: '%s'\n", $cwd;
-    printf STDERR "is directory? %s\n", (-d $cwd) ? 'yes' : 'no';
+    use File::Spec::Functions qw/tmpdir/;
+    my $tmpdir = tmpdir();
+    printf STDERR "tmpdir directory: '%s'\n", $tmpdir;
+    printf STDERR "is directory? %s\n", (-d $tmpdir) ? 'yes' : 'no';
     printf STDERR "is writeable? %s\n", (-w _) ? 'yes' : 'no';
     if( -w _ ) {
-        print STDERR "should be able to download here\n";
-    } else {
-        print STDERR "need to look somewhere else...\n";
+        print STDERR "should be able to download there\n";
         # TODO: create tempdir using File::Spec and keep track of it
     }
     print STDERR "\n";
