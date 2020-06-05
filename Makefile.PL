@@ -114,7 +114,22 @@ if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
     print STDERR "bitness: ", $bit//'<undef>', "bit\n";
     print STDERR "\n";
 
-    # 4. fetch
+    # 4. writeable directory
+    #   I was originally going to go for a temp directory... but it would make more sense if I could use the project directory
+    use File::Spec::Functions qw/rel2abs splitpath/;
+    my $cwd = join '', (splitpath(rel2abs($0)))[0..1];
+    printf STDERR "current directory: '%s'\n", $cwd;
+    printf STDERR "is directory? %s\n", (-d $cwd) ? 'yes' : 'no';
+    printf STDERR "is writeable? %s\n", (-w _) ? 'yes' : 'no';
+    if( -w _ ) {
+        print STDERR "should be able to download here\n";
+    } else {
+        print STDERR "need to look somewhere else...\n";
+        # TODO: create tempdir using File::Spec and keep track of it
+    }
+    print STDERR "\n";
+
+    # 5. fetch
     use File::Fetch;
     my %url = (
         64 => {
@@ -143,19 +158,6 @@ if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
 
 if($^O !~ /MSWin32|cygwin/ and !$ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
     warn sprintf "I don't know whether it will work with Notepad++.exe in OS '%s'\n", $^O;
-    warn << "EOW";
-
-########################################
-# However, it might work, so I don't want to FAIL on matrix.cpantesters.org.
-#   Instead, don't create the Makefile by default, so it will show up as UNKNOWN
-#
-# If you'd like to try to make it work, please set the environment variable
-#   W32MNPP_FORCE_NONWIN_TEST to a true value,
-# then re-run perl Makefile.PL, and continue the standard test suite and
-# installation procedure from there.
-########################################
-
-EOW
 }
 
 
