@@ -156,7 +156,6 @@ if($^O !~ /MSWin32|cygwin/ and !$ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
 ########################################
 
 EOW
-    exit 0; # exit 0 without Makefile existing will cause UNKNOWN
 }
 
 
