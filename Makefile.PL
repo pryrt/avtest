@@ -127,24 +127,30 @@ if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
         use File::Fetch;
         my %url = (
             64 => {
-                https => 'https://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES#64',
-                http  => 'http://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES#64',
+                https => 'https://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES?bit=64',
+                http  => 'http://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES?bit=64',
             },
             32 => {
-                https => 'https://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES#32',
-                http  => 'http://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES#32',
+                https => 'https://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES?bit=32',
+                http  => 'http://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES?bit=32',
             },
         );
         if(defined $url{$bit}) {
+            my $dlfile;
             for (qw/https http/) {
                 printf STDERR "URL: %s\n", $url{$bit}{$_};
                 my $ff = File::Fetch->new( uri => $url{$bit}{$_});
                 next unless $ff;
                 print STDERR "File::Fetch->new($url{$bit}{$_}) worked\n";
 
-                # TODO: try download here
-                last;
+                # try download here
+                $ff->fetch( to => $tmpdir )
+                    and $dlfile = $ff->output_file()
+                    and last
+                    or warn $ff->error(), "\n";
             }
+            print STDERR "File::Fetch got $dlfile\n" if defined $dlfile;
+            print STDERR "$tmpdir/$dlfile exists\n" if defined $dlfile and -f "$tmpdir/$dlfile";
         }
         print STDERR "\n";
     };
