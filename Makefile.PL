@@ -60,6 +60,8 @@ print STDERR "TopLevel TEMP = ", $ENV{TEMP}//'<undef>', "\n";
 print STDERR "TopLevel TMP = ", $ENV{TMP}//'<undef>', "\n";
 
 our $downloaded_npp_folder;
+our $downloaded_npp_zip;
+our $downloaded_npp_unzip;
 if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
     # 1. Check automated testing (cpan testers smoke tester machine)
     print STDERR "AUTOMATED_TESTING = ", $ENV{AUTOMATED_TESTING}//'<undef>', "\n";
@@ -106,7 +108,7 @@ if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
 
         # 4. writeable directory
         #   I was originally going to go for a temp directory... but it would make more sense if I could use the project directory
-        use File::Spec::Functions qw/tmpdir/;
+        use File::Spec::Functions qw/tmpdir catfile/;
         my $tmpdir = tmpdir();
         printf STDERR "tmpdir directory: '%s'\n", $tmpdir;
         printf STDERR "is directory? %s\n", (-d $tmpdir) ? 'yes' : 'no';
@@ -127,17 +129,20 @@ if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
         use File::Fetch;
         my %url = (
             64 => {
-                https => 'https://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES?bit=64',
-                http  => 'http://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES?bit=64',
+                https => 'https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.6/npp.7.8.6.bin.x64.zip',
+                http  => 'http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.6/npp.7.8.6.bin.x64.zip',
+                name  => 'npp.7.8.6.bin.x64.zip',
             },
             32 => {
-                https => 'https://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES?bit=32',
-                http  => 'http://raw.githubusercontent.com/pryrt/Win32-Mechanize-NotepadPlusPlus/master/CHANGES?bit=32',
+                https => 'https://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.6/npp.7.8.6.bin.zip',
+                http  => 'http://github.com/notepad-plus-plus/notepad-plus-plus/releases/download/v7.8.6/npp.7.8.6.bin.zip',
+                name  => 'npp.7.8.6.bin.zip',
             },
         );
-        if(defined $url{$bit}) {
+        $downloaded_npp_zip = catfile($downloaded_npp_folder, $url{$bit}{name});
+        if(defined $url{$bit} and !-f $downloaded_npp_zip) {
             my $dlfile;
-            for (qw/https http/) {
+            for (qw/http http/) {
                 printf STDERR "URL: %s\n", $url{$bit}{$_};
                 my $ff = File::Fetch->new( uri => $url{$bit}{$_});
                 next unless $ff;
@@ -149,8 +154,24 @@ if($^O =~ /MSWin32|cygwin/ or $ENV{W32MNPP_FORCE_NONWIN_TEST} ) {
                     and last
                     or warn $ff->error(), "\n";
             }
-            print STDERR "File::Fetch got $dlfile\n" if defined $dlfile;
-            print STDERR "$tmpdir/$dlfile exists\n" if defined $dlfile and -f "$tmpdir/$dlfile";
+            if( defined $dlfile ) {
+                $downloaded_npp_zip = catfile($downloaded_npp_folder, $dlfile);
+                print STDERR "File::Fetch got $dlfile =>\n\t$downloaded_npp_zip\n";
+                print STDERR "$downloaded_npp_zip exists\n" if -f $downloaded_npp_zip;
+            }
+        }
+        print STDERR "\n";
+
+        # 6. Unzip
+        if(defined($downloaded_npp_zip) && -f $downloaded_npp_zip) {
+            use Archive::Extract;
+            my $ae = Archive::Extract->new( archive => $downloaded_npp_zip );
+
+            $downloaded_npp_unzip = catfile( $downloaded_npp_folder, 'notepad++' );
+
+            my $ok = $ae->extract( to => $downloaded_npp_unzip ) or die $ae->error;
+
+            print STDERR "$downloaded_npp_unzip exists\n" if -d $downloaded_npp_unzip;
         }
         print STDERR "\n";
     };
@@ -188,6 +209,8 @@ test ::
 	\$(NOECHO) \$(ECHO) need to cleanup after myself
 	dir t
 	dir "$downloaded_npp_folder"
+	\$(NOECHO) ( \$(TEST_F) "$downloaded_npp_zip" && \$(RM_RF) "$downloaded_npp_zip" ) || \$(ECHO) post-test: skip "rm -rf $downloaded_npp_zip"
+	\$(NOECHO) ( \$(TEST_D) "$downloaded_npp_unzip" && \$(RM_RF) "$downloaded_npp_unzip" ) || \$(ECHO) post-test: skip "rm -rf $downloaded_npp_unzip"
 
 EONPP
     }
