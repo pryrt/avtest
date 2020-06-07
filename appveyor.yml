@@ -26,7 +26,7 @@ cache:
 install:
   - IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
   - echo myBits=_%myBits%_
-  - cinst %myBits% notepadplusplus
+  #- cinst %myBits% notepadplusplus
   - IF NOT DEFINED perl set perl=default
   - echo install Perl v%perl%...
   - IF /I %perl%==default (cinst %myBits% strawberryperl) ELSE (cinst %myBits% strawberryperl --version %perl%)
