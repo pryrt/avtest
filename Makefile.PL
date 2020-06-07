@@ -17,6 +17,7 @@ use 5.010;
         'Win32::GuiTest'    => 1.64,
     },
 );
+
 {
     no warnings;
     if( $ExtUtils::MakeMaker::VERSION >= '6.31' ) {
@@ -27,14 +28,17 @@ use 5.010;
     }
     if( $ExtUtils::MakeMaker::VERSION >= '6.52' ) {
         $mm_args{CONFIGURE_REQUIRES} = {
-            'ExtUtils::MakeMaker' => 0,
+            'ExtUtils::MakeMaker' => 6.00,
+            'Exporter'          => 5.57,    # needed for `use Exporter qw(import);` notation
             'warnings' => 0,
             'strict' => 0,
             'Test::More' => 0.86,
             'constant' => 0,
             'Config' => 0,
             'File::Fetch' => 0,
+            'File::Spec' => 0,
             'File::Which' => 0,
+            'Archive::Extract' => 0,
         },
     }
     if( $ExtUtils::MakeMaker::VERSION >= '6.64' ) {

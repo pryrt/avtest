@@ -6,6 +6,7 @@ use Exporter 5.57 qw(import);
 use File::Which ();
 use File::Spec ();
 use File::Fetch;
+use Archive::Extract;
 use Config;
 
 our %EXPORT_TAGS = (
@@ -28,8 +29,12 @@ sub myMakeHelper {
     my $bits = determine_bitness() or return %ret;
     $ret{bits} = $bits;
 
-    my $zip = download_zip( $bits, File::Spec->tmpdir ) or return %ret;
+    my $td = File::Spec->tmpdir;
+
+    my $zip = download_zip( $bits, $td ) or return %ret;
     $ret{zip} = $zip;
+
+    my $npp = unzip_npp( $zip, $td ) or return %ret;
 
     return %ret;
 }
@@ -73,10 +78,10 @@ sub determine_bitness {
 sub download_zip {
     my ($bits, $folder) = @_;
     if( !-w $folder ) {
-        warn sprintf "%s\tZIP: folder '%s' not writeable\n", __PACKAGE__, $folder//'<undef>';
+        warn sprintf "%s\tZIP? folder '%s' not writeable\n", __PACKAGE__, $folder//'<undef>';
         return;
     }
-    warn sprintf "%s\tZIP: folder '%s' ok\n", __PACKAGE__, $folder;
+    warn sprintf "%s\tZIP? '%s' folder ok\n", __PACKAGE__, $folder;
 
     my %url = (
         64 => {
@@ -93,7 +98,7 @@ sub download_zip {
 
     my $zip = File::Spec->catfile( $folder, $url{$bits}{name});
     if(-f $zip) {   # already downloaded
-        warn sprintf "%s\tZIP: '%s' already downloaded... moving forward\n", __PACKAGE__, $zip;
+        warn sprintf "%s\tZIP = '%s' previously downloaded\n", __PACKAGE__, $zip;
         return $zip;
     }
 
@@ -102,36 +107,42 @@ sub download_zip {
         warn sprintf "%s\tZIP: url = '%s'\n", __PACKAGE__, $url{$bits}{$_};
         my $ff = File::Fetch->new( uri => $url{$bits}{$_} );
         next unless $ff;
-        warn sprintf "%s\tZIP: File::Fetch->new(%s) created object\n", __PACKAGE__, $url{$bits}{$_};
 
         $ff->fetch( to => $folder )
             and $zip = $ff->output_file()
             and last
-            or warn sprintf "%s\tZIP: %s\n", __PACKAGE__, $ff->error();
+            or warn sprintf "%s\tZIP? download error = '%s'\n", __PACKAGE__, $ff->error()//'<undef>';
     }
     if( defined $zip ) {
-        warn sprintf "%s\tZIP: '%s' downloaded successfully\n", __PACKAGE__, $zip;
+        warn sprintf "%s\tZIP? '%s' downloaded successfully\n", __PACKAGE__, $zip;
     }
 
+    warn sprintf "%s\tZIP = %s\n", __PACKAGE__, $zip//'<undef>';
     return $zip;
 }
 
-1;
-__END__
+sub unzip_npp {
+    my ($zip, $folder) = @_;
+    my $ae = Archive::Extract->new( archive => $zip );
 
-        # 6. Unzip
-        if(defined($downloaded_npp_zip) && -f $downloaded_npp_zip) {
-            use Archive::Extract;
-            my $ae = Archive::Extract->new( archive => $downloaded_npp_zip );
+    my $unzip = File::Spec->catdir( $folder, 'notepad++' );
+    warn sprintf "%s\tUNZIP? to folder '%s'\n", __PACKAGE__, $unzip;
 
-            $downloaded_npp_unzip = catfile( $downloaded_npp_folder, 'notepad++' );
+    my $ok = $ae->extract( to => $unzip );
+    if(!$ok) {
+        warn sprintf "%s\tUNZIP? extraction error '%s'\n", __PACKAGE__, $ae->error;
+        return;
+    }
 
-            my $ok = $ae->extract( to => $downloaded_npp_unzip ) or die $ae->error;
+    my $npp = File::Spec->catfile( $unzip, 'notepad++.exe' );
+    warn sprintf "%s\tUNZIP? expect executable '%s'\n", __PACKAGE__, $npp;
+    if(!-x $npp) {
+        warn sprintf "%s\tNPP? no executable '%s'\n", __PACKAGE__, $npp;
+        return;
+    }
 
-            print STDERR "$downloaded_npp_unzip exists\n" if -d $downloaded_npp_unzip;
-        }
-        print STDERR "\n";
-    };
+    warn sprintf "%s\tNPP = %s\n", __PACKAGE__, $npp//'<undef>';
+    return $npp;
 }
 
 1;
