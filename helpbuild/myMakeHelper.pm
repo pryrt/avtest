@@ -113,6 +113,11 @@ sub download_zip {
     }
     if( defined $zip ) {
         warn sprintf "%s\tZIP? '%s' downloaded successfully\n", __PACKAGE__, $zip;
+        $zip = File::Spec->catfile($folder, $zip) unless -f $zip;
+        if( !-f $zip ) {
+            warn sprintf "%s\tZIP? '%s' doesn't exist after download\n", __PACKAGE__, $zip;
+            return;
+        }
     }
 
     warn sprintf "%s\tZIP = %s\n", __PACKAGE__, $zip//'<undef>';
