@@ -71,6 +71,9 @@ test_script:
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   - cmd/c %mymake% test
 
+on_failure:
+  - FOR /D %%D in ( c:\users\appveyor\.cpanm\work\* ) DO ( type %%D\*.log )
+
 artifacts:
   - path: chocologs
   - path: work\**\*.log

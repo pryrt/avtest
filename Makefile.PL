@@ -28,7 +28,7 @@ use 5.010;
     }
     if( $ExtUtils::MakeMaker::VERSION >= '6.52' ) {
         $mm_args{CONFIGURE_REQUIRES} = {
-            'ExtUtils::MakeMaker' => 6.00,
+            'ExtUtils::MakeMaker' => 0,
             'Exporter'          => 5.57,    # needed for `use Exporter qw(import);` notation
             'warnings' => 0,
             'strict' => 0,
@@ -58,6 +58,7 @@ use 5.010;
 use lib './helpbuild';
 use myMakeHelper;
 my %helper = myMakeHelper();
+use Data::Dumper; print Dumper \%helper;
 
 sub MY::postamble {
     my (undef,%h) = @_;
@@ -77,21 +78,13 @@ realclean ::
 testcover ::
 	$(NOECHO) cover -test -report html
 
+test ::
+	$(NOECHO) $(ECHO) need to clean up after myself
 POSTAMBLE
 
-    if( defined $downloaded_npp_folder ) {
-        $POSTAMBLE .=<<"EONPP";
-
-test ::
-	\$(NOECHO) \$(ECHO) need to cleanup after myself
-	dir t
-	dir "$downloaded_npp_folder"
-	\$(NOECHO) ( \$(TEST_F) "$downloaded_npp_zip" && \$(RM_RF) "$downloaded_npp_zip" ) || \$(ECHO) post-test: skip "rm -rf $downloaded_npp_zip"
-	\$(NOECHO) ( \$(TEST_D) "$downloaded_npp_unzip" && \$(RM_RF) "$downloaded_npp_unzip" ) || \$(ECHO) post-test: skip "rm -rf $downloaded_npp_unzip"
-
-EONPP
-    }
-
+    $POSTAMBLE .= sprintf qq{\t\$(RM_RF) "%s"\n}, $helper{zip} if exists $helper{zip};
+    $POSTAMBLE .= sprintf qq{\t\$(RM_RF) "%s"\n}, $helper{npp_folder} if exists $helper{npp_folder};
+    $POSTAMBLE .= "\n";
     return $POSTAMBLE;
 }
 

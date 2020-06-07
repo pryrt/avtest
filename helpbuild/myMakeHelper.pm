@@ -26,15 +26,13 @@ sub myMakeHelper {
 
     npp_already_exists() and return %ret;
 
-    my $bits = determine_bitness() or return %ret;
-    $ret{bits} = $bits;
+    $ret{bits} = determine_bitness() or return %ret;
 
     my $td = File::Spec->tmpdir;
 
-    my $zip = download_zip( $bits, $td ) or return %ret;
-    $ret{zip} = $zip;
+    $ret{zip} = download_zip( $ret{bits}, $td ) or return %ret;
 
-    my $npp = unzip_npp( $zip, $td ) or return %ret;
+    @ret{'npp_folder', 'npp_exe'} = unzip_npp( $ret{zip}, $td ) or return %ret;
 
     return %ret;
 }
@@ -142,7 +140,7 @@ sub unzip_npp {
     }
 
     warn sprintf "%s\tNPP = %s\n", __PACKAGE__, $npp//'<undef>';
-    return $npp;
+    return $unzip, $npp;
 }
 
 1;
