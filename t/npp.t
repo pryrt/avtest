@@ -11,7 +11,7 @@ BEGIN {
 
 use Win32::GuiTest qw(WaitWindowLike GetWindowText SetForegroundWindow SendKeys);
 
-BEGIN { $ENV{PATH} = catpath(tempdir, 'notepad++'); diag "\t", 'path => ', $ENV{PATH}; }
+BEGIN { $ENV{PATH} = catpath(tmpdir, 'notepad++'); diag "\t", 'path => ', $ENV{PATH}; }
 #my $exe = catfile( tmpdir, 'notepad++', 'notepad++.exe');
 my $exe = 'notepad++.exe'; #unless -x $exe;
 ok $exe, 'executable name';
