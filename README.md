@@ -20,3 +20,6 @@ after `make test` is complete.
 The one note is that I have to be able to either include the tempdir/notepad++/ folder in the
 path, or I have to somehow tell the test suite to try that location for notepad++ before the
 search.
+
+From my appveyor experiments, it seems to work whether it's explicitly run from the tempdir
+or whether the tempdir is added to the path...
