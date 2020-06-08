@@ -2,6 +2,7 @@
 use warnings;
 use strict;
 use Test::More;
+use File::Spec::Functions qw/tmpdir catfile catdir/;
 
 BEGIN {
     # do this _before_ use Win32::GuiTest
@@ -10,11 +11,21 @@ BEGIN {
 
 use Win32::GuiTest qw(WaitWindowLike GetWindowText SetForegroundWindow SendKeys);
 
-system 1, 'notepad++.exe';
+BEGIN {
+    $ENV{PATH} = catdir(tmpdir, 'notepad++') . ';' . $ENV{PATH};
+    diag "\t", 'path => ', $ENV{PATH};
+}
+#my $exe = catfile( tmpdir, 'notepad++', 'notepad++.exe');
+my $exe = 'notepad++.exe'; #unless -x $exe;
+ok $exe, 'executable name';
+diag "\t", "exe => ", $exe||'<undef>', "\n";
+
+system 1, $exe;
 
 my $pad = WaitWindowLike(0, undef, '^Notepad\+\+$', undef, undef, 5);
 ok $pad, 'notepad++ launched';
 note "\t", "pad => '$pad'\n";
+sleep 1;
 
 SetForegroundWindow($pad);
 

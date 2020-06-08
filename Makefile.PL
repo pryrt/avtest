@@ -1,5 +1,5 @@
 use ExtUtils::MakeMaker;
-use 5.006;
+use 5.010;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 %mm_args = (
@@ -17,22 +17,28 @@ use 5.006;
         'Win32::GuiTest'    => 1.64,
     },
 );
+
 {
     no warnings;
     if( $ExtUtils::MakeMaker::VERSION >= '6.31' ) {
         $mm_args{LICENSE} = 'perl_5';
     }
     if( $ExtUtils::MakeMaker::VERSION >= '6.48' ) {
-        $mm_args{MIN_PERL_VERSION} = '5.6.0';
+        $mm_args{MIN_PERL_VERSION} = '5.10.0';
     }
     if( $ExtUtils::MakeMaker::VERSION >= '6.52' ) {
         $mm_args{CONFIGURE_REQUIRES} = {
             'ExtUtils::MakeMaker' => 0,
+            'Exporter'          => 5.57,    # needed for `use Exporter qw(import);` notation
             'warnings' => 0,
             'strict' => 0,
             'Test::More' => 0.86,
             'constant' => 0,
             'Config' => 0,
+            'File::Fetch' => 0,
+            'File::Spec' => 0,
+            'File::Which' => 0,
+            'Archive::Extract' => 0,
         },
     }
     if( $ExtUtils::MakeMaker::VERSION >= '6.64' ) {
@@ -48,11 +54,17 @@ use 5.006;
         $mm_args{SIGN} = 1 if MM->can('signature_target') && $ENV{MM_SIGN_DIST};
     }
 }
+
+use lib './helpbuild';
+use myMakeHelper;
+my %helper = myMakeHelper();
+use Data::Dumper; print Dumper \%helper;
+
 sub MY::postamble {
     my (undef,%h) = @_;
     #require Data::Dumper;
     #print STDERR Data::Dumper->Dump([\%h], [qw(mm_args{postamble})]);
-    return <<'POSTAMBLE';
+    my $POSTAMBLE =<<'POSTAMBLE';
 # TEST_D is used to test for the existence of a directory
 TEST_D = $(ABSPERLRUN) -MExtUtils::Command -e test_d --
 
@@ -60,18 +72,20 @@ TEST_D = $(ABSPERLRUN) -MExtUtils::Command -e test_d --
 realclean ::
 	$(NOECHO) ( $(TEST_D) cover_db && $(RM_RF) cover_db ) || $(ECHO) realclean:: skip "rm -rf cover_db"
 	$(NOECHO) ( $(TEST_F) MYMETA.json.lock && $(RM_RF) MYMETA.json.lock ) || $(ECHO) realclean:: skip "rm -rf MYMETA.json.lock"
+	$(NOECHO) $(ECHO) "1;" > t/nppPath.inc.pl
 
 # run a test coverage report
 testcover ::
 	$(NOECHO) cover -test -report html
 
+test ::
+	$(NOECHO) $(ECHO) need to clean up after myself
 POSTAMBLE
-}
 
-if($^O !~ /MSWin32|cygwin/) {
-    warn "#"x40, "\n";
-    warn sprintf "# please help me with OS '%s'\n", $^O;
-    warn "#"x40, "\n";
+    $POSTAMBLE .= sprintf qq{\t\$(RM_RF) "%s"\n}, $helper{zip} if exists $helper{zip};
+    $POSTAMBLE .= sprintf qq{\t\$(RM_RF) "%s"\n}, $helper{npp_folder} if exists $helper{npp_folder};
+    $POSTAMBLE .= "\n";
+    return $POSTAMBLE;
 }
 
 WriteMakefile( %mm_args )
