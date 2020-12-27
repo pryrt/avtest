@@ -44,7 +44,7 @@ jobs:
     needs: dist
     runs-on: ${{ ( ( startsWith(matrix.os, 'ubuntu:') && 'ubuntu-latest' ) || ( startsWith(matrix.os, 'macos:') && 'macos-latest' ) || startsWith(matrix.os, 'windows:') && 'windows-latest' ) || matrix.os }}
     env: 
-      PCJ_RECURSIVE_DIR: ${{ ( ( startsWith(matrix.os, 'ubuntu:') && 'ls -latrR' ) || ( startsWith(matrix.os, 'macos:') && 'ls -latrR' ) || startsWith(matrix.os, 'windows:') && 'dir /R' ) || 'ls -latrR' }}
+      PCJ_RECURSIVE_DIR: ${{ ( startsWith(matrix.os, 'windows:') && 'dir /R' ) || 'ls -latrR' }}
     strategy:
       fail-fast: false
       matrix:
@@ -67,5 +67,9 @@ jobs:
       - name: Perl version expecting  ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
         run: |
           perl -v
-      - name: Directory Listing
-        run: $PCJ_RECURSIVE_DIR
+      - name: Linux Directory Listing
+        run: ls -latrR
+        if: ! ${{ startsWith(matrix.os, 'windows') }}
+      - name: Windows Linux Directory Listing
+        run: Get-ChildItem -Recurse
+        if: ${{ startsWith(matrix.os, 'windows') }}
