@@ -69,7 +69,7 @@ jobs:
           perl -v
       - name: Linux Directory Listing
         run: ls -latrR
-        if: ! ${{ startsWith(matrix.os, 'windows') }}
+        if: ! ${{ startsWith(matrix.os, 'windows:') }}
       - name: Windows Linux Directory Listing
         run: Get-ChildItem -Recurse
-        if: ${{ startsWith(matrix.os, 'windows') }}
+        if: ${{ startsWith(matrix.os, 'windows:') }}
