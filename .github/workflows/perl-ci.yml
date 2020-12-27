@@ -67,9 +67,14 @@ jobs:
       - name: Perl version expecting  ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
         run: |
           perl -v
+      - name: syntax check
+        run: |
+          echo ${{ matrix.os }}
+          echo ${{ startsWith(matrix.os, 'windows') }}
+          echo !${{ startsWith(matrix.os, 'windows') }}
       - name: Linux Directory Listing
         run: ls -latrR
-        if: ! ${{ startsWith(matrix.os, 'windows:') }}
+        #if: ! ${{ startsWith(matrix.os, 'windows:') }}
       - name: Windows Linux Directory Listing
         run: Get-ChildItem -Recurse
-        if: ${{ startsWith(matrix.os, 'windows:') }}
+        #if: ${{ startsWith(matrix.os, 'windows:') }}
