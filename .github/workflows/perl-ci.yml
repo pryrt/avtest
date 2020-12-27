@@ -73,11 +73,11 @@ jobs:
           echo ${{ startsWith(matrix.os, 'windows') }}
           echo !${{ startsWith(matrix.os, 'windows') }}
           echo ${{ !startsWith(matrix.os, 'windows') }}
-      - name: Linux Directory Listing
-        run: ls -latrR
-        #if: ! ${{ startsWith(matrix.os, 'windows:') }}
-      - name: Windows Linux Directory Listing
-        run: Get-ChildItem -Recurse
-        #if: ${{ startsWith(matrix.os, 'windows:') }}
+      #- name: Linux Directory Listing
+      #  run: ls -latrR
+      #  #if: ! ${{ startsWith(matrix.os, 'windows:') }}
+      #- name: Windows Linux Directory Listing
+      #  run: Get-ChildItem -Recurse
+      #  #if: ${{ startsWith(matrix.os, 'windows:') }}
       - name: Combined Directory Listing
         run: ${{ ( startsWith(matrix.os, 'windows') && 'Get-ChildItem -Recurse') || 'ls -latrR' }}
