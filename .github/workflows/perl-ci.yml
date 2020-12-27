@@ -15,7 +15,7 @@ on:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # The "build" workflow will do the checkout (and eventually cpanm installdeps)
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -34,3 +34,32 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+      
+      # Check for Perl version during build...
+      - name: Perl Version during Build
+        run: perl -v
+         
+  test: 
+    name: Test With Perl ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
+    needs: dist
+    runs-on: ${{ ( ( startsWith(matrix.os, 'ubuntu:') && 'ubuntu-latest' ) || ( startsWith(matrix.os, 'macos:') && 'macos-latest' ) || startsWith(matrix.os, 'windows:') && 'windows-latest' ) || matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os:                 [ 'ubuntu-latest' ]
+        #perl:               [ '5.8.5', '5.8.6', '5.8.7', '5.8.8', '5.8.9', '5.10', '5.10.1', '5.12', '5.14', '5.16', '5.18', '5.20', '5.22', '5.24', '5.26', '5.28', '5.30', '5.32' ]
+        perl:               [ '5.20', '5.32' ]
+    steps:
+#      - name: Get dist artifact
+#        uses: actions/download-artifact@v2
+#        with:
+#          name: dist
+      - name: Set up perl
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+          multi-thread: ${{ ( ( startsWith(matrix.os, 'windows') || endsWith(matrix.os, ':thr') ) && true ) || false }}
+          distribution: ${{ ( endsWith(matrix.os, ':strawberry') && 'strawberry' ) || 'default' }}
+      - name: Perl version
+        run: |
+          perl -v
