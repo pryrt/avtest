@@ -43,6 +43,8 @@ jobs:
     name: Test With Perl ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
     needs: dist
     runs-on: ${{ ( ( startsWith(matrix.os, 'ubuntu:') && 'ubuntu-latest' ) || ( startsWith(matrix.os, 'macos:') && 'macos-latest' ) || startsWith(matrix.os, 'windows:') && 'windows-latest' ) || matrix.os }}
+    env: 
+      PCJ_RECURSIVE_DIR: ${{ ( ( startsWith(matrix.os, 'ubuntu:') && 'ls -latrR' ) || ( startsWith(matrix.os, 'macos:') && 'ls -latrR' ) || startsWith(matrix.os, 'windows:') && 'dir /R' ) || 'ls -latrR' }}
     strategy:
       fail-fast: false
       matrix:
@@ -54,7 +56,7 @@ jobs:
 #        uses: actions/download-artifact@v2
 #        with:
 #          name: dist
-      - name: Set up perl
+      - name: Set up perl ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
         uses: shogo82148/actions-setup-perl@v1
         with:
           perl-version: ${{ matrix.perl }}
@@ -63,3 +65,5 @@ jobs:
       - name: Perl version
         run: |
           perl -v
+      - name: Directory Listing
+        run: $${ PCJ_RECURSIVE_DIR }}
