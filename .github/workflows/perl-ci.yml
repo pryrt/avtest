@@ -67,5 +67,5 @@ jobs:
         run: ${{ ( startsWith(matrix.os, 'windows') && 'Get-ChildItem -Recurse') || 'ls -latrR' }}
       - name: Find binaries
         run: |
-          ${{ startsWith(matrix.os, 'windows') && '(get-command perl).Path') || 'which perl' }}
-          ${{ startsWith(matrix.os, 'windows') && '(get-command cpanm).Path') || 'which cpanm' }}
+          ${{ ( startsWith(matrix.os, 'windows') && '(get-command perl).Path'  ) || 'which perl' }}
+          ${{ ( startsWith(matrix.os, 'windows') && '(get-command cpanm).Path' ) || 'which cpanm' }}
