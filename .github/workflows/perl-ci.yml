@@ -23,7 +23,7 @@ jobs:
     name: Test With Perl ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
     runs-on: ${{ ( ( startsWith(matrix.os, 'ubuntu:') && 'ubuntu-latest' ) || ( startsWith(matrix.os, 'macos:') && 'macos-latest' ) || startsWith(matrix.os, 'windows:') && 'windows-latest' ) || matrix.os }}
     env: 
-      PCJ_RECURSIVE_DIR: ${{ ( startsWith(matrix.os, 'windows:') && 'dir /R' ) || 'ls -latrR' }}
+      PCJ: ${{ ( startsWith(matrix.os, 'windows') && '(get-command perl).Path'  ) || 'which perl' }}
     strategy:
       fail-fast: false
       matrix:
@@ -61,4 +61,7 @@ jobs:
       # TODO: coverage prereqs (conditional)
       # TODO: run test
       # TODO: run xt (conditional)
+      - name: experiment with powershell to get right make value
+        run: |
+          perl -MConfig -le "print $Config{make}"
   
