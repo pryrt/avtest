@@ -29,7 +29,7 @@ jobs:
       matrix:
         os:                 [ 'ubuntu-latest', 'windows-latest']
         #perl:               [ '5.8.5', '5.8.6', '5.8.7', '5.8.8', '5.8.9', '5.10', '5.10.1', '5.12', '5.14', '5.16', '5.18', '5.20', '5.22', '5.24', '5.26', '5.28', '5.30', '5.32' ]
-        perl:               [ '5.8.5', '5.10', '5.32' ]
+        perl:               [ '5.10', '5.32' ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -50,7 +50,7 @@ jobs:
       - name: Create makefile before prereqs
         # but there are some modules needed by configure, which makes chicken/egg problem
         run: |
-          cpanm --notest File::Fetch File::Spec File::Which Archive::Extract
+          cpanm --notest File::Fetch File::Spec File::Which Archive::Extract Archive::Zip
           perl Makefile.PL
       - name: Install module prereqs
         # see [tobyink] for ways to enable optional dependencies, based on testing matrix
