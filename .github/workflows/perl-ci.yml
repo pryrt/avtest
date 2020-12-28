@@ -47,11 +47,11 @@ jobs:
           cpanm --version
       #- name: Combined Directory Listing
       #  run: ${{ ( startsWith(matrix.os, 'windows') && 'Get-ChildItem -Recurse') || 'ls -latrR' }}
+      - name: Create makefile before prereqs
+        run: perl Makefile.PL
       - name: Install module prereqs
         # see [tobyink] for ways to enable optional dependencies, based on testing matrix
         run: cpanm --notest --installdeps .
-      - name: Create makefile
-        run: perl Makefile.PL
       # TODO: coverage prereqs (conditional)
       # TODO: run test
       # TODO: run xt (conditional)
