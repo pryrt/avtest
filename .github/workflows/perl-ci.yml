@@ -52,11 +52,12 @@ jobs:
         run: |
           cpanm --notest File::Fetch File::Spec File::Which Archive::Extract Archive::Zip
           perl Makefile.PL
+          ${{ ( startsWith(matrix.os, 'windows') && 'Get-ChildItem -Recurse $Env:Temp') || 'echo $TMP' }}
+        # ${{ ( startsWith(matrix.os, 'windows') && '(get-command notepad++).Path'  ) || 'echo no notepad++' }}
       - name: Install module prereqs
         # see [tobyink] for ways to enable optional dependencies, based on testing matrix
         run: |
           cpanm --notest --installdeps .
-          ${{ ( startsWith(matrix.os, 'windows') && '(get-command notepad++).Path'  ) || 'which notepad++' }}          
       # TODO: coverage prereqs (conditional)
       # TODO: run test
       # TODO: run xt (conditional)
