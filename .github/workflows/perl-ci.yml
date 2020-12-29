@@ -62,6 +62,11 @@ jobs:
       # TODO: coverage prereqs (conditional)
       # TODO: run test
       # TODO: run xt (conditional)
+      - name: Linux test
+        if: ! startsWith(matrix.os, 'windows')
+        run: |
+          make test
+
       - name: Windows test
         if: startsWith(matrix.os, 'windows')
         shell: cmd
@@ -70,6 +75,3 @@ jobs:
           FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
           echo MyMake = %mymake%
           cmd/c %mymake% test
-      - name: Linux test
-        if: !startsWith(matrix.os, 'windows')
-        run: make test
