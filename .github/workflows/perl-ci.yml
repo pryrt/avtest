@@ -75,4 +75,6 @@ jobs:
           perl -MConfig -le "print $Config{make}"
           FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
           echo MyMake = %mymake%
-          cmd/c %mymake% test
+          cmd/c echo %mymake% test
+      - name: cpanm test
+        run: cpanm --test-only
