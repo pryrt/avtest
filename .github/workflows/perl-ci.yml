@@ -77,4 +77,4 @@ jobs:
           echo MyMake = %mymake%
           cmd/c echo %mymake% test
       - name: cpanm test
-        run: cpanm --test-only .
+        run: cpanm --test-only --verbose --no-interactive .
