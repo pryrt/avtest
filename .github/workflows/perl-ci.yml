@@ -63,7 +63,7 @@ jobs:
       # TODO: run test
       # TODO: run xt (conditional)
       - name: Linux test
-        if: ! startsWith(matrix.os, 'windows')
+        if: ${{ ! startsWith(matrix.os, 'windows') }}
         run: |
           make test
 
