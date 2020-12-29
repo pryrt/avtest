@@ -62,6 +62,8 @@ jobs:
       # TODO: run test
       # TODO: run xt (conditional)
       - name: experiment with powershell to get right make value
+        if: startsWith(matrix.os, 'windows')
+        shell: cmd
         run: |
           perl -MConfig -le "print $Config{make}"
-  
+
