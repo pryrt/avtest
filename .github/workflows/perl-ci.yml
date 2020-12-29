@@ -62,11 +62,14 @@ jobs:
       # TODO: coverage prereqs (conditional)
       # TODO: run test
       # TODO: run xt (conditional)
-      - name: experiment with powershell to get right make value
+      - name: Windows test
         if: startsWith(matrix.os, 'windows')
         shell: cmd
         run: |
           perl -MConfig -le "print $Config{make}"
           FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
           echo MyMake = %mymake%
-          cmd/c echo %mymake% test
+          cmd/c %mymake% test
+      - name: Linux test
+        if: !startsWith(matrix.os, 'windows')
+        run: make test
