@@ -20,6 +20,8 @@ my $exe = 'notepad++.exe'; #unless -x $exe;
 ok $exe, 'executable name';
 diag "\t", "exe => ", $exe||'<undef>', "\n";
 
+done_testing(); exit;
+__END__
 system 1, $exe;
 
 my $pad = WaitWindowLike(0, undef, '^Notepad\+\+$', undef, undef, 5);
