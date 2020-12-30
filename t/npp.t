@@ -9,7 +9,7 @@ BEGIN {
     if($^O !~ /MSWin32|cygwin/ and !$ENV{W32MNPP_FORCE_NONWIN_TEST} ) { plan skip_all => sprintf qq|Not testing with notepad.exe in OS '%s'\n|, $^O; }
 }
 
-use Win32::GuiTest qw(WaitWindowLike GetWindowText SetForegroundWindow SendKeys);
+use Win32::GuiTest qw(WaitWindowLike GetWindowText SetForegroundWindow SendKeys MenuSelect);
 
 BEGIN {
     $ENV{PATH} = catdir(tmpdir, 'notepad++') . ';' . $ENV{PATH};
@@ -34,8 +34,8 @@ like $t, qr/\QNotepad++\E/, 'notepad++ title';
 diag "\t", "t => '$t'\n";
 
 # close it
-SendKeys( '%{F4}', 1000 );
-#SendKeys( 'x', 1000 );
+#SendKeys( '%{F4}', 1000 );
+MenuSelect("&File|E&xit");
 
 # give it 5s to finish closing
 my $t0 = time;
