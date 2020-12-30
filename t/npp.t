@@ -34,8 +34,8 @@ like $t, qr/\QNotepad++\E/, 'notepad++ title';
 diag "\t", "t => '$t'\n";
 
 # close it
-SendKeys( '%F', 100 );
-SendKeys( 'x', 100 );
+SendKeys( '%{F4}', 1000 );
+#SendKeys( 'x', 1000 );
 
 # give it 5s to finish closing
 my $t0 = time;
