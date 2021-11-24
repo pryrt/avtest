@@ -46,6 +46,13 @@ jobs:
           echo normal keys
           gpg --keyid-format LONG --list-keys 
 
+          # https://stackoverflow.com/a/32834594/5508606
+          echo change ownertrust
+          gpg --export-ownertrust | sed 's/:.*/:5:/' | gpg --import-ownertrust
+
+          echo normal keys after owner trust
+          gpg --keyid-format LONG --list-keys 
+
           #echo secret keys
           #gpg --keyid-format LONG --list-secret-keys
           
