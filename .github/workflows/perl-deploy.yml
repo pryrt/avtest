@@ -51,6 +51,10 @@ jobs:
           # gpg --export-ownertrust | sed 's/:.*/:5:/' | gpg --import-ownertrust
           # echo normal keys after owner trust
           # gpg --keyid-format LONG --list-keys 
+          
+          # try to edit trust with perl as input to process:
+          perl -le 'print for qw/trust 5 y quit/' | gpg --edit-key 0x85FA5F2CF71E1CD6
+          gpg --keyid-format LONG --list-keys 
 
           #echo secret keys
           #gpg --keyid-format LONG --list-secret-keys
