@@ -40,22 +40,27 @@ jobs:
           echo "name:        ${{ steps.import_gpg.outputs.name }}"
           echo "email:       ${{ steps.import_gpg.outputs.email }}"
 
+      # trust myself
+      - name: Update Trust: Trust myself
+        id: trust_myself
+        run: |
+          # perl -le 'print for qw/trust 5 y quit/' | gpg --no-tty --command-fd 0 --edit-key 0x85FA5F2CF71E1CD6
+          gpg --no-tty --command-fd 0 --edit-key 0x85FA5F2CF71E1CD6 << EOTRUST
+          trust
+          5
+          y
+          quit
+          EOTRUST
+        
       # my experiments
       - name: My experiments
         run: |
           echo normal keys
           gpg --keyid-format LONG --list-keys 
 
-          # didn't do anything # https://stackoverflow.com/a/32834594/5508606
-          # echo change ownertrust
-          # gpg --export-ownertrust | sed 's/:.*/:5:/' | gpg --import-ownertrust
-          # echo normal keys after owner trust
+          # # try to edit trust with perl as input to process:
+          # perl -le 'print for qw/trust 5 y quit/' | gpg --command-fd 0 --edit-key 0x85FA5F2CF71E1CD6
           # gpg --keyid-format LONG --list-keys 
-          
-          # try to edit trust with perl as input to process:
-          # perl -le 'print for qw/trust 5 y quit/' | gpg --no-tty --command-fd 0 --edit-key 0x85FA5F2CF71E1CD6
-          perl -le 'print for qw/trust 5 y quit/' | gpg --command-fd 0 --edit-key 0x85FA5F2CF71E1CD6
-          gpg --keyid-format LONG --list-keys 
 
           #echo secret keys
           #gpg --keyid-format LONG --list-secret-keys
