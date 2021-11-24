@@ -23,21 +23,37 @@ jobs:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
 
-      # Set up GPG per https://stackoverflow.com/a/66457517/5508606
+      # Set up GPG per https://stackoverflow.com/a/66457517/5508606 ; updated by most recent example in action repo
       - name: Import GPG Key
-        uses: crazy-max/ghaction-import-gpg@v1
-        env:
-          GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-          PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
-          
-      - name: Verify GPG working okay
+        id: import_gpg
+        uses: crazy-max/ghaction-import-gpg@v4
+        with:
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
+          passphrase: ${{ secrets.GPG_PASSPHRASE }}
+
+      # official example
+      - name: GPG user IDs
+        run: |
+          echo "fingerprint: ${{ steps.import_gpg.outputs.fingerprint }}"
+          echo "keyid:       ${{ steps.import_gpg.outputs.keyid }}"
+          echo "name:        ${{ steps.import_gpg.outputs.name }}"
+          echo "email:       ${{ steps.import_gpg.outputs.email }}"
+
+      # my experiments
+      - name: My experiments
         run: |
           echo normal keys
           gpg --keyid-format LONG --list-keys 
           echo secret keys
-          gpg --keyid-format LONG --list-secret-keys
-          echo sign
-          gpg --recipient 0x85FA5F2CF71E1CD6 -es --armor Makefile.PL
+          #gpg --keyid-format LONG --list-secret-keys
+          #echo detach sign
+          gpg --local-user 0x85FA5F2CF71E1CD6 --detach-sign --armor Makefile.PL
+          echo verify
+          gpg --verify Makefile.PL.asc Makefile.PL
+          echo clean between
+          rm Makefile.PL.asc
+          echo encrypt
+          gpg --local-user 0x85FA5F2CF71E1CD6 --recipient 0x85FA5F2CF71E1CD6 -es --armor Makefile.PL
           echo decrypt
           gpg --output decrypt.out --decrypt Makefile.PL.asc
           echo show me the armor
