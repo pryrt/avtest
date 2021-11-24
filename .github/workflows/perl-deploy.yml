@@ -57,7 +57,7 @@ jobs:
           
           echo detach sign
           gpg --local-user 0x85FA5F2CF71E1CD6 --output Makefile.Transport.asc --sign --armor Makefile.PL
-          cat Makefile.Transport.asc
+          #cat Makefile.Transport.asc
           
           echo verify
           gpg --verify Makefile.Transport.asc
@@ -73,3 +73,13 @@ jobs:
           
           #echo show me the armor
           #cat Makefile.PL.asc
+
+      # output
+      - name: cat output
+        run: cat Makefile.Transport.asc
+
+      - name: Archive artifacts for hugo
+        uses: actions/upload-artifact@v2
+        with:
+          name: Makefile.Transport.asc
+          path: ./Makefile.Transport.asc
