@@ -58,38 +58,36 @@ jobs:
           echo normal keys
           gpg --keyid-format LONG --list-keys 
 
-          # # try to edit trust with perl as input to process:
-          # perl -le 'print for qw/trust 5 y quit/' | gpg --command-fd 0 --edit-key 0x85FA5F2CF71E1CD6
-          # gpg --keyid-format LONG --list-keys 
-
-          #echo secret keys
-          #gpg --keyid-format LONG --list-secret-keys
-          
           echo detach sign
           gpg --local-user 0x85FA5F2CF71E1CD6 --output Makefile.Transport.asc --sign --armor Makefile.PL
-          #cat Makefile.Transport.asc
           
           echo verify
           gpg --verify Makefile.Transport.asc
           
-          #echo clean between
-          #rm Makefile.PL.asc
+          echo encrypt
+          gpg --local-user 0x85FA5F2CF71E1CD6 --recipient 0x85FA5F2CF71E1CD6 --encrypt --sign --output Makefile.encrypted.asc --armor Makefile.PL
           
-          #echo encrypt
-          #gpg --local-user 0x85FA5F2CF71E1CD6 --recipient 0x85FA5F2CF71E1CD6 -es --armor Makefile.PL
+          echo decrypt
+          gpg --output decrypt.out --decrypt Makefile.encrypted.asc
           
-          #echo decrypt
-          #gpg --output decrypt.out --decrypt Makefile.PL.asc
+      - name: cats and dogs
+        run: |
+          echo Attached Signature
+          cat Makefile.Transport.asc
           
-          #echo show me the armor
-          #cat Makefile.PL.asc
+          echo Encrypted
+          cat Makefile.encrypted.asc
 
       # output
-      - name: cat output
-        run: cat Makefile.Transport.asc
+      #- name: signed artifact
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: Makefile.Transport.asc
+      #    path: ./Makefile.Transport.asc
 
-      - name: Archive artifacts for hugo
-        uses: actions/upload-artifact@v2
-        with:
-          name: Makefile.Transport.asc
-          path: ./Makefile.Transport.asc
+      # output
+      #- name: encrypted artifact
+      #  uses: actions/upload-artifact@v2
+      #  with:
+      #    name: Makefile.encrypted.asc
+      #    path: ./Makefile.encrypted.asc
