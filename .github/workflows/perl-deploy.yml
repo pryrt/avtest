@@ -45,17 +45,24 @@ jobs:
         run: |
           echo normal keys
           gpg --keyid-format LONG --list-keys 
-          echo secret keys
+
+          #echo secret keys
           #gpg --keyid-format LONG --list-secret-keys
-          #echo detach sign
+          
+          echo detach sign
           gpg --local-user 0x85FA5F2CF71E1CD6 --detach-sign --armor Makefile.PL
+          
           echo verify
           gpg --verify Makefile.PL.asc Makefile.PL
+          
           echo clean between
           rm Makefile.PL.asc
+          
           echo encrypt
           gpg --local-user 0x85FA5F2CF71E1CD6 --recipient 0x85FA5F2CF71E1CD6 -es --armor Makefile.PL
+          
           echo decrypt
           gpg --output decrypt.out --decrypt Makefile.PL.asc
+          
           echo show me the armor
           cat Makefile.PL.asc
