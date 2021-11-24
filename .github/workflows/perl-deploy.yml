@@ -53,7 +53,7 @@ jobs:
           # gpg --keyid-format LONG --list-keys 
           
           # try to edit trust with perl as input to process:
-          perl -le 'print for qw/trust 5 y quit/' | gpg --edit-key 0x85FA5F2CF71E1CD6
+          perl -le 'print for qw/trust 5 y quit/' | gpg --no-tty --command-fd 0 --edit-key 0x85FA5F2CF71E1CD6
           gpg --keyid-format LONG --list-keys 
 
           #echo secret keys
