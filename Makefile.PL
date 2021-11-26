@@ -80,6 +80,15 @@ testcover ::
 
 test ::
 	$(NOECHO) $(ECHO) need to clean up after myself
+
+# run author-tests on the original
+authtest ::
+	$(TEST_D) xt && $(MAKE) test TEST_FILES='xt/*.t'
+
+# run author-tests on the distribution
+distauthtest :: disttest
+	cd $(DISTVNAME) && $(TEST_D) xt && $(MAKE) test TEST_FILES='xt/*.t'
+
 POSTAMBLE
 
     $POSTAMBLE .= sprintf qq{\t\$(RM_RF) "%s"\n}, $helper{zip} if exists $helper{zip};

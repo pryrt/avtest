@@ -17,7 +17,17 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs-on: ${{ ( ( startsWith(matrix.os, 'ubuntu:') && 'ubuntu-latest' ) || ( startsWith(matrix.os, 'macos:') && 'macos-latest' ) || startsWith(matrix.os, 'windows:') && 'windows-latest' ) || matrix.os }}
+
+    env:
+        MM_SIGN_DIST: 1
+        TEST_SIGNATURE: 1
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os:                 [ 'ubuntu-latest' ] # [ 'windows-latest', 'ubuntu-latest' ]
+        perl:               [ '5.32' ]  # [ '5.12', '5.32', '5.34']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -51,32 +61,57 @@ jobs:
           y
           quit
           EOTRUST
-        
+
       # my experiments
       - name: My experiments
         run: |
           echo normal keys
-          gpg --keyid-format LONG --list-keys 
+          gpg --keyid-format LONG --list-keys
 
           echo detach sign
           gpg --local-user 0x85FA5F2CF71E1CD6 --output Makefile.Transport.asc --sign --armor Makefile.PL
-          
+
           echo verify
           gpg --verify Makefile.Transport.asc
-          
+
           echo encrypt
           gpg --local-user 0x85FA5F2CF71E1CD6 --recipient 0x85FA5F2CF71E1CD6 --encrypt --sign --output Makefile.encrypted.asc --armor Makefile.PL
-          
+
           echo decrypt
           gpg --output decrypt.out --decrypt Makefile.encrypted.asc
-          
+
       - name: cats and dogs
         run: |
           echo Attached Signature
           cat Makefile.Transport.asc
-          
+
           echo Encrypted
           cat Makefile.encrypted.asc
+
+      - name: Set up perl ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
+        uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+          multi-thread: ${{ ( ( startsWith(matrix.os, 'windows') || endsWith(matrix.os, ':thr') ) && true ) || false }}
+          distribution: ${{ ( endsWith(matrix.os, ':strawberry') && 'strawberry' ) || 'default' }}
+
+      - name: Pre-Makefile.PL prereqs for older perls
+        if: ${{ matrix.perl < '5.14' }}
+        run: |
+          cpanm --notest ExtUtils::MakeMaker
+
+      - name: Install pre-reqs
+        run: |
+          cpanm --notest --installdeps .
+          cpanm Module::Signature
+
+      - name: Build & Sign
+        run: |
+          perl Makefile.PL
+          make
+          make distauthtest
+          echo make dist
+          make veryclean
 
       # output
       #- name: signed artifact
