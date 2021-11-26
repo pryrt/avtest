@@ -26,7 +26,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os:                 [ 'windows-latest', 'ubuntu-latest' ]
+        os:                 [ 'ubuntu-latest' ] # gpg redirection doesn't work from windows; only need to deploy once anyway [ 'windows-latest', 'ubuntu-latest' ]
         perl:               [ '5.32' ]  # [ '5.12', '5.32', '5.34']
 
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -63,30 +63,30 @@ jobs:
           EOTRUST
 
       # my experiments
-      - name: My experiments
-        run: |
-          echo normal keys
-          gpg --keyid-format LONG --list-keys
-
-          echo detach sign
-          gpg --local-user 0x85FA5F2CF71E1CD6 --output Makefile.Transport.asc --sign --armor Makefile.PL
-
-          echo verify
-          gpg --verify Makefile.Transport.asc
-
-          echo encrypt
-          gpg --local-user 0x85FA5F2CF71E1CD6 --recipient 0x85FA5F2CF71E1CD6 --encrypt --sign --output Makefile.encrypted.asc --armor Makefile.PL
-
-          echo decrypt
-          gpg --output decrypt.out --decrypt Makefile.encrypted.asc
-
-      - name: cats and dogs
-        run: |
-          echo Attached Signature
-          cat Makefile.Transport.asc
-
-          echo Encrypted
-          cat Makefile.encrypted.asc
+      # - name: My experiments
+      #   run: |
+      #     echo normal keys
+      #     gpg --keyid-format LONG --list-keys
+      #
+      #     echo detach sign
+      #     gpg --local-user 0x85FA5F2CF71E1CD6 --output Makefile.Transport.asc --sign --armor Makefile.PL
+      #
+      #     echo verify
+      #     gpg --verify Makefile.Transport.asc
+      #
+      #     echo encrypt
+      #     gpg --local-user 0x85FA5F2CF71E1CD6 --recipient 0x85FA5F2CF71E1CD6 --encrypt --sign --output Makefile.encrypted.asc --armor Makefile.PL
+      #
+      #     echo decrypt
+      #     gpg --output decrypt.out --decrypt Makefile.encrypted.asc
+      #
+      # - name: cats and dogs
+      #   run: |
+      #     echo Attached Signature
+      #     cat Makefile.Transport.asc
+      #
+      #     echo Encrypted
+      #     cat Makefile.encrypted.asc
 
       - name: Set up perl ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
         uses: shogo82148/actions-setup-perl@v1
@@ -112,8 +112,14 @@ jobs:
           perl Makefile.PL
           make
           make distauthtest
-          echo make dist
+          make dist
           make veryclean
+
+      # output
+      - name: distribution artifact(s)
+        uses: actions/upload-artifact@v2
+        with:
+          path: ./*.tar.gz
 
       # output
       #- name: signed artifact
