@@ -115,22 +115,23 @@ jobs:
           make dist
           make veryclean
 
-      # output
-      - name: distribution artifact(s)
-        uses: actions/upload-artifact@v2
-        with:
-          path: ./*.tar.gz
-          name: avtest-unversioned.tar.gz
-
-      - name: Store tarball as asset
-        uses: svenstaro/upload-release-action@v2
-        with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ./avtest-*.tar.gz
-          #asset_name: nppUserManual.zip
-          tag: ${{ github.ref }}
-          overwrite: true
-          body: "Some release text goes here"
+      ## TODO: need to figure out how to get the name into the YML, so I can do file: and asset_name: correctly
+      ## # output
+      ## - name: distribution artifact(s)
+      ##   uses: actions/upload-artifact@v2
+      ##   with:
+      ##     path: ./*.tar.gz
+      ##     name: avtest-unversioned.tar.gz
+      ##
+      ## - name: Store tarball as asset
+      ##   uses: svenstaro/upload-release-action@v2
+      ##   with:
+      ##     repo_token: ${{ secrets.GITHUB_TOKEN }}
+      ##     file: ./avtest-*.tar.gz
+      ##     #asset_name: nppUserManual.zip
+      ##     tag: ${{ github.ref }}
+      ##     overwrite: true
+      ##     body: "Some release text goes here"
 
       # output
       #- name: signed artifact
