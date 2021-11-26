@@ -120,6 +120,17 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           path: ./*.tar.gz
+          name: avtest-unversioned.tar.gz
+
+      - name: Store tarball as asset
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./avtest-*.tar.gz
+          #asset_name: nppUserManual.zip
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "Some release text goes here"
 
       # output
       #- name: signed artifact
