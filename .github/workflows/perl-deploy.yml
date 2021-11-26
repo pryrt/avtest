@@ -102,8 +102,9 @@ jobs:
 
       - name: Install pre-reqs
         run: |
-          cpanm --notest --installdeps .
           cpanm Module::Signature
+          perl Makefile.PL
+          cpanm --notest --installdeps .
 
       - name: Build & Sign
         run: |
