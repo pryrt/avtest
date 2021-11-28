@@ -116,14 +116,22 @@ jobs:
           make veryclean
 
       - name: Variable Expriment
+        id: varex
         run: |
-          export MYVAR=`echo hello`
+          # exporting doesn't help; variable must be used in same step as it is populated.
+          MYVAR=`ls *.tar.gz`
           echo first MYVAR _ $MYVAR _
           
-      - name: Varible Experiment 2
-        run: |
-          echo MYVAR2 _ $MYVAR _
+          # https://github.community/t/how-to-set-action-env-variables-within-a-shell-script/18425
+          echo "::set-env name=MYVAR::$MYVAR"
+          # https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions
+          echo "::set-output name=MY_OUTPUT::$MYVAR"
 
+      - name: report the results of calculating the version
+        run: |
+          echo "the result is _ ${{ env.MYVAR }} _"
+          echo "the varex output is _ ${{ steps.varex.outputs.MY_OUTPUT }} _"
+          
       ## TODO: need to figure out how to get the name into the YML, so I can do file: and asset_name: correctly
       ## # output
       ## - name: distribution artifact(s)
