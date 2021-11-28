@@ -117,7 +117,7 @@ jobs:
 
       - name: Variable Expriment
         run: |
-          MYVAR=`echo hello`
+          export MYVAR=`echo hello`
           echo first MYVAR _ $MYVAR _
           
       - name: Varible Experiment 2
