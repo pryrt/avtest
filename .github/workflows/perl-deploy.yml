@@ -115,6 +115,15 @@ jobs:
           make dist
           make veryclean
 
+      - name: Variable Expriment
+        run: |
+          MYVAR=`echo hello`
+          echo first MYVAR _ $MYVAR _
+          
+      - name: Varible Experiment 2
+        run: |
+          echo MYVAR2 _ $MYVAR _
+
       ## TODO: need to figure out how to get the name into the YML, so I can do file: and asset_name: correctly
       ## # output
       ## - name: distribution artifact(s)
