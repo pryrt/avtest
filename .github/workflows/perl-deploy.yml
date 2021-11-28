@@ -123,7 +123,7 @@ jobs:
           echo first MYVAR _ $MYVAR _
           
           # https://github.community/t/how-to-set-action-env-variables-within-a-shell-script/18425
-          echo "::set-env name=MYVAR::$MYVAR"
+          # echo "::set-env name=MYVAR::$MYVAR" ## The set-env command is disabled
           # https://docs.github.com/en/actions/learn-github-actions/workflow-commands-for-github-actions
           echo "::set-output name=MY_OUTPUT::$MYVAR"
 
