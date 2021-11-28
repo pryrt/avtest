@@ -140,15 +140,15 @@ jobs:
       ##     path: ./*.tar.gz
       ##     name: avtest-unversioned.tar.gz
       ##
-      ## - name: Store tarball as asset
-      ##   uses: svenstaro/upload-release-action@v2
-      ##   with:
-      ##     repo_token: ${{ secrets.GITHUB_TOKEN }}
-      ##     file: ./avtest-*.tar.gz
-      ##     #asset_name: nppUserManual.zip
-      ##     tag: ${{ github.ref }}
-      ##     overwrite: true
-      ##     body: "Some release text goes here"
+      - name: Store tarball as asset
+        uses: svenstaro/upload-release-action@v2
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ./${{ steps.varex.outputs.MY_OUTPUT }}
+          asset_name: ${{ steps.varex.outputs.MY_OUTPUT }}
+          tag: ${{ github.ref }}
+          overwrite: true
+          body: "Some release text goes here, but only if this action was a branch that forces a tag"
 
       # output
       #- name: signed artifact
