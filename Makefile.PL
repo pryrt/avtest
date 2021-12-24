@@ -88,9 +88,9 @@ authtest ::
 # run author-tests on the distribution
 distauthtest :: disttest
 	cd $(DISTVNAME) && $(TEST_D) xt && $(MAKE) test TEST_FILES='xt/*.t'
-	echo -----
-	cat SIGNATURE
-	echo -----
+	$(NOECHO) $(ECHO) -----
+	cat $(DISTVNAME)/SIGNATURE
+	$(NOECHO) $(ECHO) -----
 
 POSTAMBLE
 
