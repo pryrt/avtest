@@ -110,6 +110,7 @@ jobs:
         run: |
           which gpg
           echo path = _ $PATH _
+          perl -e 'for(split/:/,$ENV{PATH}){printf qq(%s\t%s\n), $_, -w $_ ? qq(write) : qq(readonly)}'
           perl Makefile.PL
           make
           make distauthtest
