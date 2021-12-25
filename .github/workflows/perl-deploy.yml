@@ -110,7 +110,11 @@ jobs:
         run: |
           which gpg
           echo path = _ $PATH _
+          PATH=.:$PATH
           perl -e 'for(split/:/,$ENV{PATH}){printf qq(%s\t%s\n), $_, -w $_ ? qq(write) : qq(readonly)}'
+          echo echo FakeEncryptor > ./gpg
+          chmod a+x ./gpg
+          which gpg
           perl Makefile.PL
           make
           make distauthtest
