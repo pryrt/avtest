@@ -113,7 +113,10 @@ jobs:
           PATH=.:$PATH
           perl -e 'for(split/:/,$ENV{PATH}){printf qq(%s\t%s\n), $_, -w $_ ? qq(write) : qq(readonly)}'
           echo echo FakeEncryptor > ./gpg
-          chmod a+x ./gpg
+          echo echo FakeEncryptor > ./gpg2
+          echo echo FakeEncryptor > ./gnupg
+          echo echo FakeEncryptor > ./gnupg2
+          chmod a+x ./gpg* ./gnupg*
           which gpg
           perl Makefile.PL
           make
