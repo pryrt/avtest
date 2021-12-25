@@ -108,7 +108,8 @@ jobs:
 
       - name: Build & Sign
         run: |
-          alias gpg='echo Not Likely'
+          which gpg
+          echo path = _ $PATH _
           perl Makefile.PL
           make
           make distauthtest
