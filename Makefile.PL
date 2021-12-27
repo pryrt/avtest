@@ -3,9 +3,9 @@ use 5.010;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 %mm_args = (
-    'NAME'          => 'avtest',
+    'NAME'          => 'Math::PRBS',
     'AUTHOR'        => 'Peter C. jones <petercj AT cpan.org>',
-    'VERSION'       => '0.00',
+    'VERSION'       => '0.004001',
     'ABSTRACT'      => 'Dummy module for testing appveyor.yml',
     'PREREQ_PM'     => {
         'Exporter'          => 5.57,    # needed for `use Exporter qw(import);` notation
