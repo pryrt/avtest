@@ -61,32 +61,6 @@ jobs:
           quit
           EOTRUST
 
-      # my experiments
-      # - name: My experiments
-      #   run: |
-      #     echo normal keys
-      #     gpg --keyid-format LONG --list-keys
-      #
-      #     echo detach sign
-      #     gpg --local-user 0x85FA5F2CF71E1CD6 --output Makefile.Transport.asc --sign --armor Makefile.PL
-      #
-      #     echo verify
-      #     gpg --verify Makefile.Transport.asc
-      #
-      #     echo encrypt
-      #     gpg --local-user 0x85FA5F2CF71E1CD6 --recipient 0x85FA5F2CF71E1CD6 --encrypt --sign --output Makefile.encrypted.asc --armor Makefile.PL
-      #
-      #     echo decrypt
-      #     gpg --output decrypt.out --decrypt Makefile.encrypted.asc
-      #
-      # - name: cats and dogs
-      #   run: |
-      #     echo Attached Signature
-      #     cat Makefile.Transport.asc
-      #
-      #     echo Encrypted
-      #     cat Makefile.encrypted.asc
-
       - name: Set up perl ${{ matrix.perl }} ${{ matrix.os }} ${{ matrix.joblabel }}
         uses: shogo82148/actions-setup-perl@v1
         with:
@@ -108,13 +82,6 @@ jobs:
 
       - name: Build & Sign
         run: |
-          echo =====
-          which tty
-          tty
-          export GPG_TTY=`tty`
-          echo GPG_TTY _$(GPG_TTY)_
-          echo =====
-          
           perl Makefile.PL
           make
           make distauthtest
@@ -138,14 +105,7 @@ jobs:
           echo "the result is _ ${{ env.MYVAR }} _"
           echo "the varex output is _ ${{ steps.varex.outputs.MY_OUTPUT }} _"
           
-      ## TODO: need to figure out how to get the name into the YML, so I can do file: and asset_name: correctly
-      ## # output
-      ## - name: distribution artifact(s)
-      ##   uses: actions/upload-artifact@v2
-      ##   with:
-      ##     path: ./*.tar.gz
-      ##     name: avtest-unversioned.tar.gz
-      ##
+      ## get the name into the YML using the steps.varex.outputs.* syntax, so I can do file: and asset_name: correctly
       - name: Store tarball as asset
         uses: svenstaro/upload-release-action@v2
         with:
