@@ -114,22 +114,18 @@ jobs:
           echo begin override
           echo echo FakeEncryptor > ./gpg
           echo echo FakeEncryptor > ./gpg2
+          chmod a+x ./gpg
+          chmod a+x ./gpg2
+          echo before path = _$PATH_
           which gpg
           export PATH=.:$PATH
+          echo after path = _$PATH_
           which gpg
           gpg --version
           gpg2 --version
           echo end override
           perl -e 'sub wg { for my $g (qw/gpg gpg2/) { my$v=`$g --version 2>&1`; print qq($g => $v\n-----\n); return $g if $v && $v =~ /GnuPG/}; }; print wg(), qq(\n===\n)' 
           
-          #echo path = _ $PATH _
-          #PATH=.:$PATH
-          #perl -e 'for(split/:/,$ENV{PATH}){printf qq(%s\t%s\n), $_, -w $_ ? qq(write) : qq(readonly)}'
-          #echo echo FakeEncryptor > ./gpg
-          #echo echo FakeEncryptor > ./gpg2
-          #echo echo FakeEncryptor > ./gnupg
-          #echo echo FakeEncryptor > ./gnupg2
-          #which gpg
           perl Makefile.PL
           make
           make distauthtest
