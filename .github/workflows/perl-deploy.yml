@@ -110,6 +110,18 @@ jobs:
         run: |
           perl -e 'sub wg { for my $g (qw/gpg gpg2/) { my$v=`$g --version 2>&1`; print qq($g => $v\n-----\n); return $g if $v && $v =~ /GnuPG/}; }; print wg()' 
 
+          # try once more to override
+          echo begin override
+          echo echo FakeEncryptor > ./gpg
+          echo echo FakeEncryptor > ./gpg2
+          which gpg
+          PATH=.:$PATH
+          which gpg
+          gpg --version
+          gpg2 --version
+          echo end override
+          perl -e 'sub wg { for my $g (qw/gpg gpg2/) { my$v=`$g --version 2>&1`; print qq($g => $v\n-----\n); return $g if $v && $v =~ /GnuPG/}; }; print wg()' 
+          
           #echo path = _ $PATH _
           #PATH=.:$PATH
           #perl -e 'for(split/:/,$ENV{PATH}){printf qq(%s\t%s\n), $_, -w $_ ? qq(write) : qq(readonly)}'
@@ -117,7 +129,6 @@ jobs:
           #echo echo FakeEncryptor > ./gpg2
           #echo echo FakeEncryptor > ./gnupg
           #echo echo FakeEncryptor > ./gnupg2
-          #chmod a+x ./gpg* ./gnupg*
           #which gpg
           perl Makefile.PL
           make
