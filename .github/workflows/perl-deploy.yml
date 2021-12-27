@@ -108,22 +108,8 @@ jobs:
 
       - name: Build & Sign
         run: |
-          echo gpg
-          which gpg
-          gpg --version 2>&1
-          
-          echo gpg2
-          which gpg2
-          gpg2 --version 2>&1
-          
-          echo gnupg
-          which gnupg
-          gnupg --version 2>&1
-          
-          echo gnupg2
-          which gnupg2
-          gnupg2 --version 2>&1
-          
+          perl -e 'sub wg { for my $g (qw/gpg gpg2/) { my$v=`$g --version 2>&1`; print qq($g => $v\n-----\n); return $g if $v && $v =~ /GnuPG/}; }; print wg()' 
+
           #echo path = _ $PATH _
           #PATH=.:$PATH
           #perl -e 'for(split/:/,$ENV{PATH}){printf qq(%s\t%s\n), $_, -w $_ ? qq(write) : qq(readonly)}'
