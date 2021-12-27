@@ -108,19 +108,19 @@ jobs:
 
       - name: Build & Sign
         run: |
-          perl -e 'sub wg { for my $g (qw/gpg gpg2/) { my$v=`$g --version 2>&1`; print qq($g => $v\n-----\n); return $g if $v && $v =~ /GnuPG/}; }; print wg()' 
+          perl -e 'sub wg { for my $g (qw/gpg gpg2/) { my$v=`$g --version 2>&1`; print qq($g => $v\n-----\n); return $g if $v && $v =~ /GnuPG/}; }; print wg(), qq(\n===\n)' 
 
           # try once more to override
           echo begin override
           echo echo FakeEncryptor > ./gpg
           echo echo FakeEncryptor > ./gpg2
           which gpg
-          PATH=.:$PATH
+          export PATH=.:$PATH
           which gpg
           gpg --version
           gpg2 --version
           echo end override
-          perl -e 'sub wg { for my $g (qw/gpg gpg2/) { my$v=`$g --version 2>&1`; print qq($g => $v\n-----\n); return $g if $v && $v =~ /GnuPG/}; }; print wg()' 
+          perl -e 'sub wg { for my $g (qw/gpg gpg2/) { my$v=`$g --version 2>&1`; print qq($g => $v\n-----\n); return $g if $v && $v =~ /GnuPG/}; }; print wg(), qq(\n===\n)' 
           
           #echo path = _ $PATH _
           #PATH=.:$PATH
