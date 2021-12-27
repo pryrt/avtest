@@ -55,10 +55,10 @@ use 5.010;
     }
 }
 
-use lib './helpbuild';
-use myMakeHelper;
-my %helper = myMakeHelper();
-use Data::Dumper; print Dumper \%helper;
+# use lib './helpbuild';
+# use myMakeHelper;
+# my %helper = myMakeHelper();
+# use Data::Dumper; print Dumper \%helper;
 
 sub MY::postamble {
     my (undef,%h) = @_;
@@ -88,9 +88,9 @@ authtest ::
 # run author-tests on the distribution
 distauthtest :: disttest
 	cd $(DISTVNAME) && $(TEST_D) xt && $(MAKE) test TEST_FILES='xt/*.t'
-	$(NOECHO) $(ECHO) -----
+	$(NOECHO) $(ECHO) ----- START SIGNATURE
 	cat $(DISTVNAME)/SIGNATURE
-	$(NOECHO) $(ECHO) -----
+	$(NOECHO) $(ECHO) ----- END SIGNATURE
 
 POSTAMBLE
 
