@@ -45,16 +45,17 @@ build_script:
   - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
   - echo MyMake = %mymake%
   - echo =====
-  - git clone -q --branch=debug https://github.com/pryrt/module-signature.git C:\projects\module-signature
-  - dir /O:d c:\projects\
-  - dir /O:d c:\projects\module-signature\
-  - |-
-    PUSHD c:\projects\module-signature
-    cpanm .
-    POPD
-  #- perl -le "print qq(perl c:/projects/module-signature/script/cpansign %*)" > c:\projects\module-signature\script\cpansign.bat
-  #- set PERL5LIB=C:\projects\module-signature\lib
-  #- PATH=C:\projects\module-signature\script;%PATH%
+  #- git clone -q --branch=debug https://github.com/pryrt/module-signature.git C:\projects\module-signature
+  #- dir /O:d c:\projects\
+  #- dir /O:d c:\projects\module-signature\
+  #- |-
+  #  PUSHD c:\projects\module-signature
+  #  cpanm .
+  #  POPD
+  ##- perl -le "print qq(perl c:/projects/module-signature/script/cpansign %*)" > c:\projects\module-signature\script\cpansign.bat
+  ##- set PERL5LIB=C:\projects\module-signature\lib
+  ##- PATH=C:\projects\module-signature\script;%PATH%
+  - cpanm https://github.com/pryrt/module-signature.git@debug     &rem should install the debug branch from github directly
   - echo made it past Module::Signature
 
 after_build:
