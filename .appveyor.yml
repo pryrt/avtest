@@ -60,7 +60,7 @@ test_script:
   #- perl -V:ptrsize -V:ivsize -V:myuname
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   - where cpansign
-  - cpansign -help
+  - perl C:\projects\module-signature\script\cpansign -help
   - cmd/c %mymake% test
   - echo cmd/c %mymake% dist
   - dir /O:d
