@@ -47,10 +47,11 @@ build_script:
   - echo =====
   - git clone -q --branch=debug https://github.com/pryrt/module-signature.git C:\projects\module-signature
   - dir /O:d c:\projects\
-  - dir /O:d c:\projects\module-signature
-  - perl -le "print qq(perl c:/projects/module-signature/script/cpansign %*)" > c:\projects\module-signature\script\cpansign.bat
-  - set PERL5LIB=C:\projects\module-signature\lib
-  - PATH=C:\projects\module-signature\script;%PATH%
+  - dir /O:d c:\projects\module-signature\
+  - cpanm c:\projects\module-signature\ & REM installing it should create the .bat version of script in PATH
+  #- perl -le "print qq(perl c:/projects/module-signature/script/cpansign %*)" > c:\projects\module-signature\script\cpansign.bat
+  #- set PERL5LIB=C:\projects\module-signature\lib
+  #- PATH=C:\projects\module-signature\script;%PATH%
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
@@ -61,7 +62,7 @@ test_script:
   #- perl -V:ptrsize -V:ivsize -V:myuname
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   - where cpansign
-  - cpansign -help
+  - cpansign --help
   - cmd/c %mymake% test
   - echo the next command might freeze ... but I hope it gives me more clarity as to what's going wrong
   - cmd/c %mymake% dist
