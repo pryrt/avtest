@@ -47,7 +47,7 @@ test_script:
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   #- cmd/c %mymake% test
   - gpg --list-keys
-  - perl -le "print $ENV{$_} for qw/PATH secret_phrase/"
+  - perl -le "print join('|',$_,split //, $ENV{$_}) for qw/secret_phrase/"
 
 on_failure:
   - FOR /D %%D in ( c:\users\appveyor\.cpanm\work\* ) DO ( type %%D\*.log )
