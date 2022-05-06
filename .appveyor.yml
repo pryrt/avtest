@@ -48,10 +48,14 @@ build_script:
   - git clone -q --branch=debug https://github.com/pryrt/module-signature.git C:\projects\module-signature
   - dir /O:d c:\projects\
   - dir /O:d c:\projects\module-signature\
-  - cpanm c:\projects\module-signature\ & REM installing it should create the .bat version of script in PATH
+  - |-
+    PUSHD c:\projects\module-signature
+    cpanm .
+    POPD
   #- perl -le "print qq(perl c:/projects/module-signature/script/cpansign %*)" > c:\projects\module-signature\script\cpansign.bat
   #- set PERL5LIB=C:\projects\module-signature\lib
   #- PATH=C:\projects\module-signature\script;%PATH%
+  - echo made it past Module::Signature
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
