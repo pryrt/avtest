@@ -32,10 +32,10 @@ build_script:
   #- echo MyMake = %mymake%
   - where gpg
   - gpg --version
-  - echo %secret_phrase% | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
+  #- echo %secret_phrase% | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
   - dir /O:d
   - gpg --list-keys
-  - echo %secret_phrase% | gpg --batch --yes --passphrase-fd 0 --import decrypted.asc
+  #- echo %secret_phrase% | gpg --batch --yes --passphrase-fd 0 --import decrypted.asc
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
@@ -47,6 +47,7 @@ test_script:
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   #- cmd/c %mymake% test
   - gpg --list-keys
+  - perl -le "$x = $ENV{secret_phrase} =~ s/.*/\n$0\n/r; print 'safe version: ', $x;"
 
 on_failure:
   - FOR /D %%D in ( c:\users\appveyor\.cpanm\work\* ) DO ( type %%D\*.log )
