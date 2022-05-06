@@ -23,6 +23,16 @@ install:
   #- IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   #- cpanm App::cpanminus
   #- cpanm --installdeps .
+  - gpg --list-keys
+  - echo retrieve keyfile and import with ultimate trust
+  - perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
+  - perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg --batch --yes --passphrase-fd 0 --import decrypted.asc
+  - del decrypted.asc
+  #- perl -le "print for qw/trust 5 y quit/, q()" > gpgscript
+  #- gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D < gpgscript
+  - perl -le "print for qw/trust 5 y quit/, q()" | gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D
+  - del gpgscript
+  - gpg --list-keys
 
 build_script:
   #- echo build using Perl=%perl%...
@@ -30,15 +40,6 @@ build_script:
   #- perl Makefile.PL
   #- FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
   #- echo MyMake = %mymake%
-  - where gpg
-  - gpg --version
-  - gpg --list-keys
-  - echo retrieve keyfile
-  - perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
-  - dir /O:d
-  - echo import keyfile
-  - perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg --batch --yes --passphrase-fd 0 --import decrypted.asc
-  - gpg --list-keys
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
@@ -49,10 +50,6 @@ test_script:
   #- perl -V:ptrsize -V:ivsize -V:myuname
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   #- cmd/c %mymake% test
-  - gpg --list-keys
-  - perl -le "print for qw/trust 5 y quit/, q()" > gpgscript
-  - type gpgscript
-  - gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D < gpgscript
   - gpg --list-keys
 
 on_failure:
