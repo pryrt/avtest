@@ -45,9 +45,14 @@ test_script:
   #- perl -V:ptrsize -V:ivsize -V:myuname
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   #- cmd/c %mymake% test
-  - dir /O:d
   - gpg --list-keys
-  - perl -e "print $ENV{$_} for qw/secret_phrase/"  | gpg --batch --yes --passphrase-fd 0 --import decrypted.asc
+  - |-
+    perl -e "print $ENV{$_} for qw/secret_phrase/"  | gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D << EOTRUST
+    trust
+    5
+    y
+    quit
+    EOTRUST
   - gpg --list-keys
 
 on_failure:
