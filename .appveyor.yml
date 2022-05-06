@@ -7,28 +7,14 @@ environment:
     - perl: default
       AUTOMATED_TESTING: 1
       myBits: --FORCEx86
-    #- perl: 5.26.2.1
-    #- perl: 5.24.4.1
-    #- perl: 5.22.3.1
-    #- perl: 5.20.3.3
-    #- perl: 5.18.4.1
-    ##failed##- perl: 5.16.3.1  # choco package points to outdated download URL
-    #- perl: 5.16.3.20170202
-    #- perl: 5.14.4.1
-    ##failed##- perl: 5.12.3.0  # choco package points to outdated download URL
-    ##failed##- perl: 5.12.3.1  # choco package points to outdated download URL
-    #- perl: 5.12.3.20180709 # predates cpanm
-    #- perl: 5.10.1.5 # predates cpanm
 
 skip_tags: true
 
-cache:
-  #- C:\strawberry -> appveyor.yml
-
 install:
+  - echo Installing GPG, I hope:
+  - cinst gnupg
   - IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
   - echo myBits=_%myBits%_
-  #- cinst %myBits% notepadplusplus
   - IF NOT DEFINED perl set perl=default
   - echo install Perl v%perl%...
   - IF /I %perl%==default (cinst %myBits% strawberryperl) ELSE (cinst %myBits% strawberryperl --version %perl%)
@@ -38,23 +24,7 @@ install:
   - perl -le "print qq(installed perl v$])"
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
-  #- perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  #- perl -e "if($]<5.014){ system('cpanm', '--notest', $_) for qw(Encode::compat) }"
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  #- perl -e "if($]<5.014){ system('cpanm', $_) for qw(Config::Perl::V Math::Int64 Win32::API) }"
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
   - cpanm --installdeps .
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
-  # (normally) don't test when installing, because it takes time, and Devel::Cover is a proven module
-  #- cpanm --force Devel::Cover
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" COPY /Y "C:\Users\appveyor\.cpanm\build.log" cpanm.build.log
-  #- cpanm --notest Devel::Cover
 
 build_script:
   - echo build using Perl=%perl%...
@@ -62,10 +32,8 @@ build_script:
   - perl Makefile.PL
   - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
   - echo MyMake = %mymake%
-  - echo NotASecret = %notasecret%
-  - echo SecondSec = %secondsec%
-  - echo MyNotSecretEnv = %my_notsecret_env%
-  
+  - echo where gpg
+  - gpg --version
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
