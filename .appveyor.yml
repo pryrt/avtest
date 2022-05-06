@@ -23,6 +23,7 @@ install:
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
   - cpanm --installdeps .
+  - cpanm Module::Signature
   - echo ================================================================
   - gpg --list-keys
   - echo retrieve keyfile and import with ultimate trust
@@ -39,6 +40,7 @@ install:
 build_script:
   - echo build using Perl=%perl%...
   - perl -le "print qq(build with perl v$])"
+  - set MM_SIGN_DIST=1
   - perl Makefile.PL
   - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
   - echo MyMake = %mymake%
@@ -52,6 +54,8 @@ test_script:
   #- perl -V:ptrsize -V:ivsize -V:myuname
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   - cmd/c %mymake% test
+  - cmd/c %mymake% dist
+  - dir /O:d
 
 on_failure:
   - FOR /D %%D in ( c:\users\appveyor\.cpanm\work\* ) DO ( type %%D\*.log )
