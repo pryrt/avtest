@@ -48,7 +48,8 @@ test_script:
   #- cmd/c %mymake% test
   - gpg --list-keys
   - perl -le "print join('|',$_,split //, $ENV{$_}) for qw/secret_phrase/"
-  - perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
+  #- perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
+  - echo %secret_phrase% | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
   - dir /O:d
 
 on_failure:
