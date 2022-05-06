@@ -20,14 +20,16 @@ install:
   #- cmd: appveyor-retry choco install gpg4win
   #- cinst gnupg
   - echo finished gnupg install!
-  #- IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
-  #- echo myBits=_%myBits%_
-  #- IF NOT DEFINED perl set perl=default
-  #- echo install Perl v%perl%...
-  #- IF /I %perl%==default (cinst %myBits% strawberryperl) ELSE (cinst %myBits% strawberryperl --version %perl%)
+  - @echo system perl:
+  - perl -V
+  - IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
+  - echo myBits=_%myBits%_
+  - IF NOT DEFINED perl set perl=default
+  - echo install Perl v%perl%...
+  - IF /I %perl%==default (cinst %myBits% strawberryperl) ELSE (cinst %myBits% strawberryperl --version %perl%)
   - IF NOT EXIST "chocologs" MKDIR chocologs
   - IF EXIST "c:\ProgramData\chocolatey\logs" COPY /Y "c:\ProgramData\chocolatey\logs" "chocologs"
-  #- set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
+  - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
   - perl -le "print qq(installed perl v$])"
   - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   - cpanm App::cpanminus
@@ -39,7 +41,6 @@ build_script:
   - perl Makefile.PL
   - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
   - echo MyMake = %mymake%
-  - perl -V
   - where gpg
   - gpg --version
 
