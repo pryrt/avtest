@@ -20,7 +20,7 @@ install:
   #- cmd: appveyor-retry choco install gpg4win
   #- cinst gnupg
   - echo finished gnupg install!
-  - @echo system perl:
+  - echo system perl:
   - perl -V
   - IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
   - echo myBits=_%myBits%_
