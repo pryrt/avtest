@@ -3,7 +3,7 @@ use 5.010;
 # See lib/ExtUtils/MakeMaker.pm for details of how to influence
 # the contents of the Makefile that is written.
 %mm_args = (
-    'NAME'          => 'Math::PRBS',
+    'NAME'          => 'my::Distro',
     'AUTHOR'        => 'Peter C. jones <petercj AT cpan.org>',
     'VERSION'       => '0.004001',
     'ABSTRACT'      => 'Dummy module for testing appveyor.yml',
@@ -16,6 +16,9 @@ use 5.010;
         'Test::More'        => 0.86,
         'Win32::GuiTest'    => 1.64,
     },
+    'realclean'     => {
+        FILES => 'cover_db MYMETA.json.lock',
+    }
 );
 
 {
@@ -55,24 +58,11 @@ use 5.010;
     }
 }
 
-# use lib './helpbuild';
-# use myMakeHelper;
-# my %helper = myMakeHelper();
-# use Data::Dumper; print Dumper \%helper;
-
 sub MY::postamble {
     my (undef,%h) = @_;
-    #require Data::Dumper;
-    #print STDERR Data::Dumper->Dump([\%h], [qw(mm_args{postamble})]);
     my $POSTAMBLE =<<'POSTAMBLE';
 # TEST_D is used to test for the existence of a directory
 TEST_D = $(ABSPERLRUN) -MExtUtils::Command -e test_d --
-
-# addition to realclean: also delete coverage database, if testcover was run
-realclean ::
-	$(NOECHO) ( $(TEST_D) cover_db && $(RM_RF) cover_db ) || $(ECHO) realclean:: skip "rm -rf cover_db"
-	$(NOECHO) ( $(TEST_F) MYMETA.json.lock && $(RM_RF) MYMETA.json.lock ) || $(ECHO) realclean:: skip "rm -rf MYMETA.json.lock"
-	$(NOECHO) $(ECHO) "1;" > t/nppPath.inc.pl
 
 # run a test coverage report
 testcover ::
@@ -94,8 +84,6 @@ distauthtest :: disttest
 
 POSTAMBLE
 
-    $POSTAMBLE .= sprintf qq{\t\$(RM_RF) "%s"\n}, $helper{zip} if exists $helper{zip};
-    $POSTAMBLE .= sprintf qq{\t\$(RM_RF) "%s"\n}, $helper{npp_folder} if exists $helper{npp_folder};
     $POSTAMBLE .= "\n";
     return $POSTAMBLE;
 }
