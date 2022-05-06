@@ -13,29 +13,29 @@ environment:
 skip_tags: true
 
 install:
-  - IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
-  - echo myBits=_%myBits%_
-  - IF NOT DEFINED perl set perl=default
-  - echo install Perl v%perl%...
-  - IF /I %perl%==default (cinst %myBits% strawberryperl) ELSE (cinst %myBits% strawberryperl --version %perl%)
-  - IF NOT EXIST "chocologs" MKDIR chocologs
-  - IF EXIST "c:\ProgramData\chocolatey\logs" COPY /Y "c:\ProgramData\chocolatey\logs" "chocologs"
-  - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
-  - perl -le "print qq(installed perl v$])"
-  - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
-  - cpanm App::cpanminus
-  - cpanm --installdeps .
+  #- IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
+  #- echo myBits=_%myBits%_
+  #- IF NOT DEFINED perl set perl=default
+  #- echo install Perl v%perl%...
+  #- IF /I %perl%==default (cinst %myBits% strawberryperl) ELSE (cinst %myBits% strawberryperl --version %perl%)
+  #- IF NOT EXIST "chocologs" MKDIR chocologs
+  #- IF EXIST "c:\ProgramData\chocolatey\logs" COPY /Y "c:\ProgramData\chocolatey\logs" "chocologs"
+  #- set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
+  #- perl -le "print qq(installed perl v$])"
+  #- IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
+  #- cpanm App::cpanminus
+  #- cpanm --installdeps .
 
 build_script:
-  - echo build using Perl=%perl%...
-  - perl -le "print qq(build with perl v$])"
-  - perl Makefile.PL
-  - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
-  - echo MyMake = %mymake%
+  #- echo build using Perl=%perl%...
+  #- perl -le "print qq(build with perl v$])"
+  #- perl Makefile.PL
+  #- FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
+  #- echo MyMake = %mymake%
   - where gpg
   - gpg --version
   - echo %secret_asc% > secret.asc
-  - dir
+  - echo %secret_phrase% | gpg --batch --yes --passphrase-fd 0 --import secret.asc
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
