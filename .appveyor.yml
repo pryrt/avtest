@@ -48,6 +48,7 @@ build_script:
   - git clone -q --branch=debug https://github.com/pryrt/module-signature.git C:\projects\module-signature
   - dir /O:d c:\projects\
   - dir /O:d c:\projects\module-signature
+  - perl -le "print qq(perl %~dp\\cpansign)" > c:\projects\module-signature\script\cpansign.bat
   - set PERL5LIB=C:\projects\module-signature\lib
   - PATH=C:\projects\module-signature\script;%PATH%
 
@@ -60,7 +61,7 @@ test_script:
   #- perl -V:ptrsize -V:ivsize -V:myuname
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   - where cpansign
-  - perl C:\projects\module-signature\script\cpansign -help
+  - cpansign -help
   - cmd/c %mymake% test
   - echo the next command might freeze ... but I hope it gives me more clarity as to what's going wrong
   - cmd/c %mymake% dist
