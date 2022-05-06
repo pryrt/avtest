@@ -46,7 +46,8 @@ build_script:
   - echo MyMake = %mymake%
   - echo =====
   - git clone -q https://github.com/audreyt/module-signature.git C:\projects\module-signature
-  - git checkout master
+  - dir /O:d c:\projects\
+  - dir /O:d c:\projects\module-signature
   - set PERL5LIB=C:\projects\module-signature\lib
   - PATH=C:\projects\module-signature\script;%PATH%
 
