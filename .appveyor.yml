@@ -13,9 +13,12 @@ skip_tags: true
 install:
   - echo Installing GPG, I hope ----------------------
   # https://help.appveyor.com/discussions/questions/20054-installing-gnupg-for-tests => path issues
-  - PATH=C:\ProgramData\chocolatey\bin;%PATH%
-  - echo %PATH%
-  - cinst gnupg
+  - ps: |
+          $path = [Environment]::GetEnvironmentVariable("path", "machine")
+          $newPath = ($path.Split(';') | Where-Object { $_ -eq 'C:\ProgramData\chocolatey\bin' }) -join ';'
+          [Environment]::SetEnvironmentVariable("path", $newPath, "machine")
+  - cmd: appveyor-retry choco install gpg4win
+  #- cinst gnupg
   - echo finished gnupg install!
   - IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
   - echo myBits=_%myBits%_
