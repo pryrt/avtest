@@ -62,7 +62,8 @@ test_script:
   - where cpansign
   - perl C:\projects\module-signature\script\cpansign -help
   - cmd/c %mymake% test
-  - echo cmd/c %mymake% dist
+  - echo the next command might freeze ... but I hope it gives me more clarity as to what's going wrong
+  - cmd/c %mymake% dist
   - dir /O:d
 
 on_failure:
