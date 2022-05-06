@@ -45,7 +45,7 @@ build_script:
   - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
   - echo MyMake = %mymake%
   - echo =====
-  - git clone -q https://github.com/audreyt/module-signature.git C:\projects\module-signature
+  - git clone -q --branch=debug https://github.com/pryrt/module-signature.git C:\projects\module-signature
   - dir /O:d c:\projects\
   - dir /O:d c:\projects\module-signature
   - set PERL5LIB=C:\projects\module-signature\lib
@@ -60,6 +60,7 @@ test_script:
   #- perl -V:ptrsize -V:ivsize -V:myuname
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   - where cpansign
+  - cpansign -help
   - cmd/c %mymake% test
   - echo cmd/c %mymake% dist
   - dir /O:d
