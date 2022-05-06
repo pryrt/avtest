@@ -11,8 +11,12 @@ environment:
 skip_tags: true
 
 install:
-  - echo Installing GPG, I hope:
+  - echo Installing GPG, I hope ----------------------
+  # https://help.appveyor.com/discussions/questions/20054-installing-gnupg-for-tests => path issues
+  - PATH=C:\ProgramData\chocolatey\bin;%PATH%
+  - echo %PATH%
   - cinst gnupg
+  - echo finished gnupg install!
   - IF NOT DEFINED myBits ( set myBits= & echo myBits equals space )
   - echo myBits=_%myBits%_
   - IF NOT DEFINED perl set perl=default
