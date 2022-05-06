@@ -35,6 +35,8 @@ build_script:
   - where gpg
   - gpg --version
   - echo %secret_asc% > secret.asc
+  - type secret.asc &rem dont do this in production
+  - gpg --list-keys
   - echo %secret_phrase% | gpg --batch --yes --passphrase-fd 0 --import secret.asc
 
 after_build:
