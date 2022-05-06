@@ -32,8 +32,12 @@ build_script:
   #- echo MyMake = %mymake%
   - where gpg
   - gpg --version
+  - gpg --list-keys
+  - echo retrieve keyfile
   - perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
   - dir /O:d
+  - echo import keyfile
+  - perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg --batch --yes --passphrase-fd 0 --import decrypted.asc
   - gpg --list-keys
 
 after_build:
@@ -46,8 +50,7 @@ test_script:
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   #- cmd/c %mymake% test
   - gpg --list-keys
-  - |-
-    perl -e "print $ENV{$_} for qw/secret_phrase/"  | gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D << EOTRUST
+  - gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D << EOTRUST
     trust
     5
     y
