@@ -50,12 +50,9 @@ test_script:
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   #- cmd/c %mymake% test
   - gpg --list-keys
-  - gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D << EOTRUST
-    trust
-    5
-    y
-    quit
-    EOTRUST
+  - perl -le 'print for qw/trust 5 y quit/, q()' > gpgscript
+  - type gpgscript
+  - gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D < gpgscript
   - gpg --list-keys
 
 on_failure:
