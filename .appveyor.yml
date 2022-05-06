@@ -23,6 +23,13 @@ install:
   #- IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
   #- cpanm App::cpanminus
   #- cpanm --installdeps .
+
+build_script:
+  #- echo build using Perl=%perl%...
+  #- perl -le "print qq(build with perl v$])"
+  #- perl Makefile.PL
+  #- FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
+  #- echo MyMake = %mymake%
   - gpg --list-keys
   - echo retrieve keyfile and import with ultimate trust
   - perl -e "print $ENV{$_} for qw/secret_phrase/" | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
@@ -33,13 +40,6 @@ install:
   - perl -le "print for qw/trust 5 y quit/, q()" | gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D
   - del gpgscript
   - gpg --list-keys
-
-build_script:
-  #- echo build using Perl=%perl%...
-  #- perl -le "print qq(build with perl v$])"
-  #- perl Makefile.PL
-  #- FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
-  #- echo MyMake = %mymake%
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
