@@ -1,6 +1,4 @@
 environment:
-  secret_asc:
-    secure: am16BSuxK8JZU2N+lSbSIdpyQFXRIE0hcQmoudMUTlxYDWWYIoCVLsqfaI5FpP/4TD55mtXk9wMQsWIM2LqaoxZpDJXVsZKFvGGct4JZJJxTpb77H7ULr39gR2cdcBsfTYVXiNcPQ9zAxVPLdALLTYAjeSZjYZfsIBxCK0hJ6P5pzOy6zkufNkAhQ8BsosDTcQlkQoDM92i3uuy1G2zLsiaxACKPpkwzP0Fdocwtf+02ygtOuRNwXasfXEoiN1zRxhLRLi8ynctXmKmRe86Og0/OMZpE0WUqhPj1y47R86RO1cYHtpjJEpv0i7QKfytwZvDUcEKUA0o4bnCaHwuQoiNRfYVXxPR4ybV+HWwTieFO5HNluvijTL0wtaI8CZ9qivW4QoUkU6Q1xGThx61Gua+3VOOrlpcUGQx8rbbrh3iI9583g1IQ+Rh2pzpPhuyIpJovmEMf4jtn4o/7VOUrmc+IiYumtUlkb+3/I48gWx7Ov+yL+ngFLHHgWzHLVxZrZ2+KWfivtNP8o1vK1QvUOuN1I51gSHdF55m2pTB9Qj3MUWR4okn1LRBmbir2G7X8TYdDqHgPncTGyk0CoQk2HMADPVKlr3+V6MNW97o5ytHfIkIBV8g7wAkGi+UTgAqrA/gwkCdXrtiC8W6Z1bJ24k3wcQ8GSRpcqTpMM+MxkgT4ev+rDnC50SL926a79j1yxNf3H9X7JaJO7TA3qY2Hjxo/6/+mKpjOX25YZFIP/3BP7xB3b4avOyS5dRhnWRnoU1KEi6jS50ZNcMjng80+e/IVKMq/GGDxv6vjeLkR6XfP6eE8SyNIDylgzIqJ0tmnkda9kLFjlu4ivYnJBVPgKXtxqowDBnXblc15XZ9D8y4z6yY3iltr1fw4jA2pkqGxavI9lldrepOmncaqUpBrT5FBKGUYC/pnhAoyW+GgpM94JK3eBwMtkYouLk3BV1rDK2EBHfg//JfAtF/r3ePyP5iUc/fI4PGPUBbJ4HK8ubaYCfhMzS3+TUuM+8splCPBwMagBn+DN+HibWJl8sLaW/7N8URPK9jQOaaq904oD61MmkHDDbpZDovMdD2EIuc6W6qRS+EdiHyTl/mDo1Si82ANOu4fATVi6bKhxWMIry0jJSkh/h3vj5KdCp2xhmADPpv6tasQBpaFqS0F3ZyUWXAYYx3jq5JvJmWfEcnMwUU=
   secret_phrase:
     secure: aDUp5TrFn/tjuLp679VfU7STg4Gq+62NdypFwqhFRJg=
   matrix:
@@ -34,10 +32,10 @@ build_script:
   #- echo MyMake = %mymake%
   - where gpg
   - gpg --version
-  - echo %secret_asc% > secret.asc
-  - type secret.asc &rem dont do this in production
+  - echo %secret_phrase% | gpg -o decrypted.asc --batch --yes --passphrase-fd 0 --decrypt encrypted.asc
+  - dir /O:d
   - gpg --list-keys
-  - echo %secret_phrase% | gpg --batch --yes --passphrase-fd 0 --import secret.asc
+  - echo %secret_phrase% | gpg --batch --yes --passphrase-fd 0 --import decrypted.asc
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
@@ -48,7 +46,6 @@ test_script:
   #- perl -V:ptrsize -V:ivsize -V:myuname
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   #- cmd/c %mymake% test
-  - dir
   - gpg --list-keys
 
 on_failure:
