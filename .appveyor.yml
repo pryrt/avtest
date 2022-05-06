@@ -1,4 +1,6 @@
 environment:
+  my_notsecret_env:
+    secure: FW/SmCFLiDFloFpCkThhTIj4v4k5hVfU+lWZ4YWKjE8Cc1jc7+1EqRlB1wIw7rsr
   matrix:
     - perl: default
       AUTOMATED_TESTING: 1
@@ -60,6 +62,10 @@ build_script:
   - perl Makefile.PL
   - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
   - echo MyMake = %mymake%
+  - echo NotASecret = %notasecret%
+  - echo SecondSec = %secondsec%
+  - echo MyNotSecretEnv = %my_notsecret_env%
+  
 
 after_build:
   - IF EXIST "c:\users\appveyor\.cpanm\work\" (MOVE /Y c:\users\appveyor\.cpanm\work .)
