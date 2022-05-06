@@ -58,3 +58,9 @@ EOTRUST
 ```
 
 Convert that to appveyor.  Oh, right, that's HEREDOC notation, which works in ghaction+bash, but isn't going to work in appveyor+cmd.  Use perl to write those lines to a `gpgscript`, then `gpg ... < gpgscript` to get it to read those commands.  => **success**: it shows ultimate trust now.
+
+### cpansign Debug
+
+Installed Module::Signature correctly, and tried to run it when I have the variable set correctly.  However, it gets stuck on `cpansign -s`, just like it did on GH-A.  **Annoying.**
+
+My next idea is to get my own copy of Module::Signature, and start adding debug hooks, to figure out where things are going wrong. :-(
