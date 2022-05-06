@@ -50,7 +50,7 @@ test_script:
   # cmd/c before %mymake% to avoid appveyor parse error with %mymake% as first word of command
   #- cmd/c %mymake% test
   - gpg --list-keys
-  - perl -le 'print for qw/trust 5 y quit/, q()' > gpgscript
+  - perl -le "print for qw/trust 5 y quit/, q()" > gpgscript
   - type gpgscript
   - gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D < gpgscript
   - gpg --list-keys
