@@ -84,4 +84,4 @@ on_failure:
 artifacts:
   - path: chocologs
   - path: work\**\*.log
-  - path: *.tar.gz
+  - path: .\*.tar.gz
