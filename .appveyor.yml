@@ -37,6 +37,9 @@ install:
   - gpg --list-keys
   - where gpg
   - where gpg-agent
+  - TASKLIST /FI "IMAGENAME eq gpg*"
+  - gpg-agent 
+  - dir /O:d c:\users\appveyor\.gnupg %APPDATA%\gnupg
 
 
 build_script:
