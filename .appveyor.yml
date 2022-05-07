@@ -35,9 +35,9 @@ install:
   #- del gpgscript
   - perl -le "print for qw/trust 5 y quit/, q()" | gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D
   - gpg --list-keys
-  - TASKLIST /FI "IMAGENAME eq gpg*"
-  - gpgconf --list-dirs
-  - gpgconf --list-options gpg-agent
+  #- TASKLIST /FI "IMAGENAME eq gpg*"
+  #- gpgconf --list-dirs
+  #- gpgconf --list-options gpg-agent
 
 build_script:
   - echo build using Perl=%perl%...
@@ -72,7 +72,7 @@ test_script:
   - cpansign --help
   #- perl -e "print $ENV{secret_phrase}" | gpg --batch --yes --passphrase-fd 0 --clearsign --openpgp --personal-digest-preferences RIPEMD160 .appveyor.yml >> signedveyor.tmp
   #- type signedveyor.tmp
-  - perl -e "print $ENV{secret_phrase}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 -o- --clearsign .appveyor.yml &rem this worked on home pc
+  ## worked ##- perl -e "print $ENV{secret_phrase}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 -o- --clearsign .appveyor.yml &rem this worked on home pc
   - cmd/c %mymake% test
   - echo the next command might freeze ... but I hope it gives me more clarity as to what's going wrong
   - cmd/c %mymake% dist
