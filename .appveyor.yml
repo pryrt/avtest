@@ -35,12 +35,9 @@ install:
   #- del gpgscript
   - perl -le "print for qw/trust 5 y quit/, q()" | gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D
   - gpg --list-keys
-  - where gpg
-  - where gpg-agent
   - TASKLIST /FI "IMAGENAME eq gpg*"
-  - gpg-agent 
-  - dir /O:d c:\users\appveyor\.gnupg %APPDATA%\gnupg
-
+  - gpgconf --list-dirs
+  - gpgconf --list-options gpg-agent
 
 build_script:
   - echo build using Perl=%perl%...
