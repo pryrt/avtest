@@ -72,9 +72,7 @@ test_script:
   - cpansign --help
   #- perl -e "print $ENV{secret_phrase}" | gpg --batch --yes --passphrase-fd 0 --clearsign --openpgp --personal-digest-preferences RIPEMD160 .appveyor.yml >> signedveyor.tmp
   #- type signedveyor.tmp
-  - perl -e "print $ENV{secret_phrase}" | gpg --batch --yes --passphrase-fd 0 --clearsign .appveyor.yml
-  - perl -e "print $ENV{secret_phrase}" | gpg --batch --yes --passphrase-fd 0 --openpgp --clearsign .appveyor.yml
-  - perl -e "print $ENV{secret_phrase}" | gpg --batch --yes --passphrase-fd 0 --openpgp --personal-digest-preferences RIPEMD160 --clearsign .appveyor.yml
+  - perl -e "print $ENV{secret_phrase}" | gpg --batch --yes --pinentry-mode loopback --passphrase-fd 0 -o- --clearsign .appveyor.yml &rem this worked on home pc
   - cmd/c %mymake% test
   - echo the next command might freeze ... but I hope it gives me more clarity as to what's going wrong
   - cmd/c %mymake% dist
