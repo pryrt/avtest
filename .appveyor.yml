@@ -35,6 +35,8 @@ install:
   #- del gpgscript
   - perl -le "print for qw/trust 5 y quit/, q()" | gpg --no-tty --command-fd 0 --edit-key 0x5F40919C58146C3D
   - gpg --list-keys
+  - where gpg
+  - where gpg-agent
 
 
 build_script:
