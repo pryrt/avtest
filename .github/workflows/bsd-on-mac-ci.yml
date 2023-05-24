@@ -23,7 +23,7 @@ jobs:
     - name: raw macos-12
       run: |
         perl -V
-        cpanm -V
+        which cpanm
     - name: VM(FreeBSD)
       uses: vmactions/freebsd-vm@v0
       with:
@@ -38,7 +38,8 @@ jobs:
           env
           freebsd-version
           perl -V
-          cpanm -V
+          #cpanm -V
+          which cpanm
     - name: VM(OpenBSD)
       id: test
       uses: vmactions/openbsd-vm@v0
@@ -55,4 +56,5 @@ jobs:
           whoami
           env
           perl -V
-          cpanm -V
+          #cpanm -V
+          which cpanm
