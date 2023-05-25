@@ -21,6 +21,8 @@ jobs:
       uses: vmactions/freebsd-vm@v0
       with:
         usesh: true
+        sync: rsync
+        copyback: false
         prepare: |
           pkg install -y curl
 
@@ -29,7 +31,7 @@ jobs:
           pwd
           ls -lah
           perl -v
-          curl -L https://cpanmin.us | perl - App::cpanminus
+          curl -L https://cpanmin.us | perl - --sudo App::cpanminus
 #    - name: VM(OpenBSD)
 #      id: test
 #      uses: vmactions/openbsd-vm@v0
