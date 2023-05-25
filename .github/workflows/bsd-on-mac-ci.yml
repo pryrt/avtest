@@ -27,11 +27,11 @@ jobs:
           pkg install -y curl
           pkg update -f
           echo search curl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          pkg search -S curl
+          pkg search curl
           echo search perl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          pkg search -S perl
+          pkg search perl
           echo search p5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          pkg search -S p5
+          pkg search p5
           #pkg install -y perl
 
         run: |
