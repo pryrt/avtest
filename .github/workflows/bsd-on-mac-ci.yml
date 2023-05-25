@@ -16,7 +16,7 @@ jobs:
       run: |
         echo prepare ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         perl -V
-        curl -L https://cpanmin.us | perl - App::cpanminus
+        curl -L https://cpanmin.us | perl - --sudo App::cpanminus
         echo run ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         cpanm --version
         echo run ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
