@@ -24,15 +24,10 @@ jobs:
         sync: rsync
         copyback: false
         prepare: |
-          pkg install -y curl
           pkg update -f
-          echo search curl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          pkg search curl
-          echo search perl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          pkg search perl
-          echo search p5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          pkg search p5
-          #pkg install -y perl
+          pkg install -y curl
+          #pkg search perl
+          pkg install -y perl5.36-5.36.0_2
 
         run: |
           perl -v
