@@ -13,12 +13,14 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: raw macos-12
-      prepare: |
-        echo in prepare
       run: |
+        echo prepare ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         perl -V
         curl -L https://cpanmin.us | perl - App::cpanminus
         which cpanm
+        cpanm --version
+        echo run ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        echo TODO...
 #    - name: VM(FreeBSD)
 #      uses: vmactions/freebsd-vm@v0
 #      with:
