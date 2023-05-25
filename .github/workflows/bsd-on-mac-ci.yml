@@ -1,15 +1,7 @@
 name: BSD-on-MAC
 
 # controls when the action will run
-on:
-  # Triggers the workflow on push or pull request events but only for the master branch
-  push:
-    branches:
-  pull_request:
-    branches: [ master ]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+on: [push, workflow_dispatch]
 
 jobs:
   test:
@@ -23,6 +15,7 @@ jobs:
     - name: raw macos-12
       run: |
         perl -V
+        #curl -L https://cpanmin.us | perl - App::cpanminus
         #which cpanm
     - name: VM(FreeBSD)
       uses: vmactions/freebsd-vm@v0
@@ -32,29 +25,26 @@ jobs:
           pkg install -y curl
 
         run: |
-          pwd
-          ls -lah
-          whoami
-          env
           freebsd-version
-          perl -V
-          #cpanm -V
-          which cpanm
-    - name: VM(OpenBSD)
-      id: test
-      uses: vmactions/openbsd-vm@v0
-      with:
-        envs: 'MYTOKEN MYTOKEN2'
-        usesh: true
-        prepare: |
-          pkg_add curl
-
-        run: |
-
           pwd
           ls -lah
-          whoami
-          env
-          perl -V
-          #cpanm -V
-          which cpanm
+          perl -v
+          curl -L https://cpanmin.us | perl - App::cpanminus
+#    - name: VM(OpenBSD)
+#      id: test
+#      uses: vmactions/openbsd-vm@v0
+#      with:
+#        envs: 'MYTOKEN MYTOKEN2'
+#        usesh: true
+#        prepare: |
+#          pkg_add curl
+#
+#        run: |
+#
+#          pwd
+#          ls -lah
+#          whoami
+#          env
+#          perl -V
+#          #cpanm -V
+#          which cpanm
