@@ -25,11 +25,9 @@ jobs:
         copyback: false
         prepare: |
           pkg install -y curl
+          pkg install -y perl
 
         run: |
-          freebsd-version
-          pwd
-          ls -lah
           perl -v
           curl -L https://cpanmin.us | perl - --sudo App::cpanminus
 #    - name: VM(OpenBSD)
