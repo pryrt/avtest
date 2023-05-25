@@ -25,6 +25,7 @@ jobs:
         copyback: false
         prepare: |
           pkg install -y curl
+          pkg update -f
           pkg install -y perl
 
         run: |
