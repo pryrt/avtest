@@ -18,12 +18,14 @@ jobs:
         echo PATH = $PATH
         echo prepare ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         which perl
+        ls -l `which perl`
         perl -V
         curl -L https://cpanmin.us | perl - --sudo --verbose App::cpanminus
         echo set ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        PATH=/usr/local/Cellar/perl/5.36.0:$PATH
+        PATH=/usr/local/Cellar/perl/5.36.0/bin:$PATH
         echo NEW PATH = $PATH
         which perl
+        ls -latr /usr/local/bin/perl /usr/local/Cellar/perl/5.36.0/bin/
         echo version ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         cpanm --version
         echo run ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
