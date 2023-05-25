@@ -17,7 +17,7 @@ jobs:
         echo prepare ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         perl -V
         curl -L https://cpanmin.us | perl - App::cpanminus
-        which cpanm
+        echo run ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         cpanm --version
         echo run ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         echo TODO...
