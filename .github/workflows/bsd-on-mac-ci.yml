@@ -26,7 +26,13 @@ jobs:
         prepare: |
           pkg install -y curl
           pkg update -f
-          pkg install -y perl
+          echo search curl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          pkg search -S curl
+          echo search perl ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          pkg search -S perl
+          echo search p5 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          pkg search -S p5
+          #pkg install -y perl
 
         run: |
           perl -v
