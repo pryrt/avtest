@@ -41,14 +41,12 @@ jobs:
           pkg install -y curl
           #pkg search perl
           pkg install -y perl5.36-5.36.0_2
-          echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~
-          pkg info -l perl5.36-5.36.0_2
-          echo ===========================
-          ###### UNKNOWN: claims to be installed, but perl -v says perl not found,
-          ######          so perl not in path, despite being installed :-(
-
+          #pkg info -l perl5.36-5.36.0_2
         run: |
-          echo do nothing yet
+          echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+          ls -l /usr/local/bin/*5.36.0
+          whoami
+          echo ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
           #perl -v
           #curl -L https://cpanmin.us | perl - --sudo App::cpanminus
 #    - name: VM(OpenBSD)
