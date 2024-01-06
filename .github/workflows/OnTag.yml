@@ -22,5 +22,5 @@ jobs:
       - name: Show meta-info
         run: |
           echo Hello, world!
-          echo Just GitHub: ${{ github }}
-          echo GitHub.event: ${{ github.event }}
+          echo Just GitHub: ${{ toJson(github) }}
+          echo GitHub.event: ${{ toJson(github.event) }}
