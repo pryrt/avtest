@@ -1,10 +1,9 @@
-name: OnTagMetaData
+name: OnDeploymentMetaData
 
 # Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    tags: '*'
+  # Triggers the workflow on deployment events (after tag)
+  deployment:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,6 +20,4 @@ jobs:
       # Runs a set of commands using the runners shell
       - name: Show meta-info
         run: |
-          echo Hello, world!
-          echo Just GitHub: ${{ toJson(github) }}
-          echo GitHub.event: ${{ toJson(github.event) }}
+          echo JSON: ${{ toJson(github) }}
