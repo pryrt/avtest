@@ -4,6 +4,7 @@ name: OnTagMetaDataRelease
 on:
   # Triggers the workflow on deployment events (after tag)
   release:
+    types: [published]
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -22,9 +23,10 @@ jobs:
       - name: Show meta-info
         run: |
           echo "ref name          : '${{ github.ref_name }}'"
-          echo "github totality   : ${{ toJson(github) }}"
-          echo "event release     : ${{ toJson(github.event.release) }}"
+          echo "event action      : '${{ github.event.action }}'"
           echo "event release body: '${{ github.event.release.body }}'"
           echo "event release name: '${{ github.event.release.name }}'"
 
+#         echo "github totality   : ${{ toJson(github) }}"
+#         echo "event release     : ${{ toJson(github.event.release) }}"
 # end
