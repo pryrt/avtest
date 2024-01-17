@@ -1,9 +1,9 @@
-name: OnTagMetaDataDeploy
+name: OnTagMetaDataRelease
 
 # Controls when the workflow will run
 on:
   # Triggers the workflow on deployment events (after tag)
-  deployment:
+  release:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -21,9 +21,8 @@ jobs:
         uses: actions/checkout@v4
       - name: Show meta-info
         run: |
-          echo "github event: ${{ toJson(github) }}"
-          echo "head message: ${{ github.event.head_commit.message }}"
-          echo "ref name    : ${{ github.ref_name }}"
+          pwd
+          echo "github full : ${{ toJson(github) }}"
           echo tag -n ===================
           git tag -n
           echo tag -n99 =================
@@ -31,5 +30,6 @@ jobs:
           echo tag -n -l ================
           git tag -n --list "${{ github.ref_name }}"
           echo "--------------------"
+          pwd
 
 # end
