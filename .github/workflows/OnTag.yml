@@ -18,8 +18,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Runs a set of commands using the runners shell
+      - name: Checkout code
+        uses: actions/checkout@v2
       - name: Show meta-info
         run: |
-          echo tag -m ${{ github.event.head_commit.message }}
-          # echo JSON: ${{ toJson(github) }}
+          #echo github event: ${{ toJson(github.event) }}
+          echo head message: ${{ github.event.head_commit.message }}
+          echo ref name    : ${{ github.event.ref_name }}
+          git tag -l ${{ github.event.ref_name }}
+
+# end
