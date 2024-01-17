@@ -25,8 +25,12 @@ jobs:
           echo "github event: ${{ toJson(github) }}"
           echo "head message: ${{ github.event.head_commit.message }}"
           echo "ref name    : ${{ github.ref_name }}"
-          git tag
-          git tag --list "${{ github.ref_name }}"
+          echo tag -n ===================
+          git tag -n
+          echo tag -n99 =================
+          git tag -n99
+          echo tag -n -l ================
+          git tag -n --list "${{ github.ref_name }}"
           echo "--------------------"
 
 # end
