@@ -22,6 +22,7 @@ jobs:
       - name: Show meta-info
         run: |
           echo "ref name          : '${{ github.ref_name }}'"
+          echo "github totality   : ${{ toJson(github) }}"
           echo "event release     : ${{ toJson(github.event.release) }}"
           echo "event release body: '${{ github.event.release.body }}'"
           echo "event release name: '${{ github.event.release.name }}'"
