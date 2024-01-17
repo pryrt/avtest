@@ -19,12 +19,12 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
       - name: Show meta-info
         run: |
-          echo github event: ${{ toJson(github) }}
-          echo head message: ${{ github.event.head_commit.message }}
-          # echo ref name    : ${{ github.event.ref_name }}
-          git tag
+          # github event: ${{ toJson(github) }}
+          # head message: ${{ github.event.head_commit.message }}
+          # ref name    : ${{ github.ref_name }}
+          git tag -l ${{ github.ref_name }}
 
 # end
