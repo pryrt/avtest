@@ -11,11 +11,11 @@ jobs:
         name: Choco help
         uses: crazy-max/ghaction-chocolatey@v3
         with:
-          args: install -y notepadplusplus
+          args: install -y notepadplusplus.commandline
       -
         name: Find N++
         shell: cmd
         run: |
           where notepad++.exe
-          dir /N C:\Program Files\
-          dir /N C:\ProgramData\Chocolatey\
+          dir /N C:\ProgramData\Chocolatey\lib
+          dir /N .
