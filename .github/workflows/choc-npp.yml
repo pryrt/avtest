@@ -17,5 +17,5 @@ jobs:
         shell: cmd
         run: |
           where notepad++.exe
-          dir /N/S C:\ProgramData\Chocolatey\
           dir /N C:\Program Files\
+          dir /N C:\ProgramData\Chocolatey\
