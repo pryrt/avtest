@@ -24,4 +24,7 @@ jobs:
           dir /N C:\Program Files\Notepad++\
           echo AppData
           dir /N %AppData%\Notepad++\
+          echo find
+          cd \
+          dir /B/N/S Notepad++
 
