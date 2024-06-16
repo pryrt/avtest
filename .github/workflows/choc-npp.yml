@@ -18,13 +18,9 @@ jobs:
         shell: cmd
         run: |
           where notepad++.exe
-          echo lib
-          dir /N C:\ProgramData\Chocolatey\lib
           echo ProgFiles
-          dir /N C:\Program Files\Notepad++\
+          dir /N "C:\Program Files\Notepad++\
           echo AppData
           dir /N %AppData%\Notepad++\
-          echo find
-          cd \
-          dir /B/N/S Notepad++
+
 
