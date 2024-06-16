@@ -17,10 +17,6 @@ jobs:
         name: Find N++
         shell: cmd
         run: |
-          where notepad++.exe
-          echo ProgFiles
-          dir /N "C:\Program Files\Notepad++\
-          echo AppData
-          dir /N %AppData%\Notepad++\
-
+          dir /N/S "C:\Program Files\Notepad++\"
+          dir /N/S "%AppData%\Notepad++\"
 
