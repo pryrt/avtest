@@ -4,9 +4,9 @@ environment:
   matrix:
     - perl: default
       AUTOMATED_TESTING: 1
-    - perl: default
-      AUTOMATED_TESTING: 1
-      myBits: --FORCEx86
+    #- perl: default
+    #  AUTOMATED_TESTING: 1
+    #  myBits: --FORCEx86
     #- perl: 5.26.2.1
     #- perl: 5.24.4.1
     #- perl: 5.22.3.1
@@ -35,26 +35,11 @@ install:
   - IF NOT EXIST "chocologs" MKDIR chocologs
   - IF EXIST "c:\ProgramData\chocolatey\logs" COPY /Y "c:\ProgramData\chocolatey\logs" "chocologs"
   - set PATH=C:\strawberry\perl\bin;C:\strawberry\perl\site\bin;C:\strawberry\c\bin;%PATH%
+  - where perl
+  - echo %CD%
+  - echo cd C:\projects\%APPVEYOR_PROJECT_NAME%
+  - echo %APPVEYOR_BUILD_FOLDER%
   - perl -le "print qq(installed perl v$])"
-  - IF NOT EXIST c:\strawberry\perl\bin\cpanm.bat (cpan -i App::cpanminus)
-  - cpanm App::cpanminus
-  #- perl -e "if($]<5.012){ system('cpanm', 'ExtUtils::MakeMaker@6.98' ) }"
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  #- perl -e "if($]<5.014){ system('cpanm', '--notest', $_) for qw(Encode::compat) }"
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  #- perl -e "if($]<5.014){ system('cpanm', $_) for qw(Config::Perl::V Math::Int64 Win32::API) }"
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  - cpanm --installdeps .
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" TYPE "C:\Users\appveyor\.cpanm\build.log" >> cpanm.build.log
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" DEL "C:\Users\appveyor\.cpanm\build.log"
-  # --installdeps doesn't include Devel::Cover, since it's not a PREREQ_PM; but appveyor needs it, so install it manually
-  # (normally) don't test when installing, because it takes time, and Devel::Cover is a proven module
-  #- cpanm --force Devel::Cover
-  #- IF EXIST "C:\Users\appveyor\.cpanm\build.log" COPY /Y "C:\Users\appveyor\.cpanm\build.log" cpanm.build.log
-  #- cpanm --notest Devel::Cover
 
 build_script:
   - echo build using Perl=%perl%...
@@ -62,9 +47,9 @@ build_script:
   - perl Makefile.PL
   - FOR /F "tokens=* USEBACKQ" %%F IN (`perl -MConfig -e "print $Config{make}"`) DO ( SET mymake=%%F )
   - echo MyMake = %mymake%
-  - echo NotASecret = %notasecret%
-  - echo SecondSec = %secondsec%
-  - echo MyNotSecretEnv = %my_notsecret_env%
+  #- echo NotASecret = %notasecret%
+  #- echo SecondSec = %secondsec%
+  #- echo MyNotSecretEnv = %my_notsecret_env%
   
 
 after_build:
