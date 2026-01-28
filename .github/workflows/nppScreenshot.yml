@@ -13,8 +13,23 @@ jobs:
       with:
         args: install -y notepadplusplus
 
-    - name: 🦎🗊 Verify Notepad++
+    - name: 🦎🗊 Prepare Notepad++
       run: |
-        Get-ChildItem "C:\Program Files\Notepad++"
-        Get-ChildItem "C:\Program Files\Notepad++\Themes"
-        Get-ChildItem "$env:APPDATA\Notepad++"
+        $NppDir = "C:\Program Files\Notepad++"
+        $ThemeSource = "$NppDir\Themes\Bespin.xml"
+        $ThemeDest = "$env:APPDATA\Notepad++\stylers.xml"
+        $NppDir\notepad++.exe -qSpeed1 -qt="one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten"
+        # wait 5 seconds for N++ to launch and start typing
+        Start-Sleep -Seconds 5
+        # I am hoping it's random enough that my screenshots will be 
+  
+    - name: 📸 Take Screenshot
+      uses: OrbitalOwen/desktop-screenshot-action@0.1
+      with:
+        file-name: 'desktop.jpg'
+
+    - name: 🎉 Store screenshot as artifact
+      uses: actions/upload-artifact@v6
+      with:
+          name: nppScreenshot
+          path: ./desktop.jpg
