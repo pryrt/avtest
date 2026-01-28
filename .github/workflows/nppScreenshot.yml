@@ -18,10 +18,7 @@ jobs:
         $NppDir = "C:\Program Files\Notepad++"
         $ThemeSource = "$NppDir\Themes\Bespin.xml"
         $ThemeDest = "$env:APPDATA\Notepad++\stylers.xml"
-        & "$NppDir\notepad++.exe" -qSpeed1 -qt="one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten"
-        # wait 5 seconds for N++ to launch and start typing
-        Start-Sleep -Seconds 5
-        # I am hoping it's random enough that my screenshots will be 
+        Copy-Item "$ThemeSource" -Destination "$ThemeDest" -Force
   
     #    - name: 📸 Take Screenshot
     #      uses: OrbitalOwen/desktop-screenshot-action@0.1
@@ -31,6 +28,11 @@ jobs:
     - name: 📸 Take Desktop Screenshot
       shell: powershell
       run: |
+        & "C:\Program Files\Notepad++\notepad++.exe" -qSpeed1 -qt="one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten one two three four five six seven eight nine ten"
+        #
+        # wait 5 seconds for N++ to launch and start typing
+        Start-Sleep -Seconds 5
+        #
         Add-Type -AssemblyName System.Windows.Forms
         Add-Type -AssemblyName System.Drawing
         $Screen = [System.Windows.Forms.Screen]::PrimaryScreen
@@ -40,7 +42,6 @@ jobs:
         $Bitmap.Save("$PWD/screenshot.png", [System.Drawing.Imaging.ImageFormat]::Png)
         $Graphics.Dispose()
         $Bitmap.Dispose()
-
 
     - name: 🎉 Store screenshot as artifact
       uses: actions/upload-artifact@v6
