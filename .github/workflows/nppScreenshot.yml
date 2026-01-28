@@ -1,0 +1,20 @@
+name: 🦎🗊 Notepad++ Screenshot 📸
+
+# controls when the action will run
+on: [push, workflow_dispatch]
+
+jobs:
+  nppScreenshot:
+    name: 🦎🗊 Notepad++ Screenshot 📸
+    runs-on: windows-latest
+    steps:
+    - name: 🦎🗊 Install Notepad++
+      uses: crazy-max/ghaction-chocolatey@v3
+      with:
+        args: install -y notepadplusplus
+
+    - name: 🦎🗊 Verify Notepad++
+      run: |
+        Get-ChildItem "C:\Program Files\Notepad++"
+        Get-ChildItem "C:\Program Files\Notepad++\Themes"
+        Get-ChildItem "$env:APPDATA\Notepad++"
