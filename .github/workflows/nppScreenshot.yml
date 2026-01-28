@@ -23,13 +23,27 @@ jobs:
         Start-Sleep -Seconds 5
         # I am hoping it's random enough that my screenshots will be 
   
-    - name: 📸 Take Screenshot
-      uses: OrbitalOwen/desktop-screenshot-action@0.1
-      with:
-        file-name: 'desktop.jpg'
+    #    - name: 📸 Take Screenshot
+    #      uses: OrbitalOwen/desktop-screenshot-action@0.1
+    #      with:
+    #        file-name: 'desktop.jpg'
+
+    - name: 📸 Take Desktop Screenshot
+      shell: powershell
+      run: |
+        Add-Type -AssemblyName System.Windows.Forms
+        Add-Type -AssemblyName System.Drawing
+        $Screen = [System.Windows.Forms.Screen]::PrimaryScreen
+        $Bitmap = New-Object System.Drawing.Bitmap($Screen.Bounds.Width, $Screen.Bounds.Height)
+        $Graphics = [System.Drawing.Graphics]::FromImage($Bitmap)
+        $Graphics.CopyFromScreen($Screen.Bounds.X, $Screen.Bounds.Y, 0, 0, $Screen.Bounds.Size)
+        $Bitmap.Save("$PWD/screenshot.png", [System.Drawing.Imaging.ImageFormat]::Png)
+        $Graphics.Dispose()
+        $Bitmap.Dispose()
+
 
     - name: 🎉 Store screenshot as artifact
       uses: actions/upload-artifact@v6
       with:
           name: nppScreenshot
-          path: ./desktop.jpg
+          path: ./screenshot.png
