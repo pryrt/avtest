@@ -70,3 +70,20 @@ jobs:
       with:
           name: nppScreenshot
           path: ./screenshot*.png
+
+# Cool.  I've got this one to the point where I can do screenshots of a theme of my choice
+# I am thinking of, in the future, using this screenshot ability to generate some snapshots
+# of the various nppTheme entries "in action", so that the Theme Collection can give a 
+# preview to help people know what a given theme looks like.  I would need a wrapper script
+# around it, or maybe just a powershell for-loop to go through each, though I'd have to 
+# figure out how to kill the n++ process each time.  I asked AI how I might get the processID
+# and end the proess when I wanted to:
+# >>
+# >> # 1. Start the EXE and store the process object in $myTask
+# >> $myTask = Start-Process "notepad.exe" -PassThru
+# >>
+# >> # 2. Wait for 10 seconds
+# >> Start-Sleep -Seconds 10
+# >>
+# >> # 3. Kill the specific task using its ID
+# >> Stop-Process -Id $myTask.Id -Force
