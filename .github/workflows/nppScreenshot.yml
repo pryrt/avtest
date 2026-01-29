@@ -39,7 +39,29 @@ jobs:
         $Bitmap = New-Object System.Drawing.Bitmap($Screen.Bounds.Width, $Screen.Bounds.Height)
         $Graphics = [System.Drawing.Graphics]::FromImage($Bitmap)
         $Graphics.CopyFromScreen($Screen.Bounds.X, $Screen.Bounds.Y, 0, 0, $Screen.Bounds.Size)
-        $Bitmap.Save("$PWD/screenshot.png", [System.Drawing.Imaging.ImageFormat]::Png)
+        $Bitmap.Save("$PWD/screenshot1.png", [System.Drawing.Imaging.ImageFormat]::Png)
+        $Graphics.Dispose()
+        $Bitmap.Dispose()
+
+    - name: 📸 Take Second Screenshot
+      shell: powershell
+      run: |
+        "#!/usr/bin/perl" >> blah.pl
+        "print qq(Hello World\n);" >> blah.pl
+        "sub doesNothing { return 0; }" >> blah.pl
+        #
+        & "C:\Program Files\Notepad++\notepad++.exe" blah.pl
+        #
+        # wait 5 seconds to make sure file is loaded
+        Start-Sleep -Seconds 5
+        #
+        Add-Type -AssemblyName System.Windows.Forms
+        Add-Type -AssemblyName System.Drawing
+        $Screen = [System.Windows.Forms.Screen]::PrimaryScreen
+        $Bitmap = New-Object System.Drawing.Bitmap($Screen.Bounds.Width, $Screen.Bounds.Height)
+        $Graphics = [System.Drawing.Graphics]::FromImage($Bitmap)
+        $Graphics.CopyFromScreen($Screen.Bounds.X, $Screen.Bounds.Y, 0, 0, $Screen.Bounds.Size)
+        $Bitmap.Save("$PWD/screenshot2.png", [System.Drawing.Imaging.ImageFormat]::Png)
         $Graphics.Dispose()
         $Bitmap.Dispose()
 
@@ -47,4 +69,4 @@ jobs:
       uses: actions/upload-artifact@v6
       with:
           name: nppScreenshot
-          path: ./screenshot.png
+          path: ./screenshot*.png
