@@ -19,3 +19,5 @@ If you used AI to generate this pull request or the accompanying code, please le
 - [ ] I have read [contributing guidelines](https://github.com/notepad-plus-plus/notepad-plus-plus/blob/master/CONTRIBUTING.md)
 
 fix #NNNNN
+
+<!-- more commments here -->
